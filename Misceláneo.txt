@@ -1,3 +1,48 @@
 T3_B_0000P (Tier 3 - Pantallas) id, nombre pieza, cantidad, mínimo de venta, máximo de venta, punto de reorden, stock máximo
 T3_B_0000B (Tier 3 - Bocinas)
 T3_B_0000C (Tier 3 - Cables)
+
+from reactpy import html
+from sqlalchemy.sql import select
+from database.connection import conexion, stock_table  
+import httpx
+
+async def fetch_stock_data():
+    async with httpx.AsyncClient() as client:
+        response = await client.get("http://127.0.0.1:8000/stockfull")
+
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        print(f"Error al obtener los datos: {response.status_code}")
+        return None
+
+stock_data = fetch_stock_data()
+
+table = html.table({"class":"table"},
+    html.thead(
+        html.tr(
+            html.th("ID"),
+            html.th("Número de Parte"),
+            html.th("Descripción"),
+            html.th("Stock actual"),     
+        ),
+    ),
+    html.tbody(
+        [
+            html.tr(
+                html.td(fila[0]), 
+                html.td(fila[1]), 
+                html.td(fila[2]),  
+                html.td(fila[3]),
+            )
+            for fila in stock_data
+        ],
+    ),
+)
+
+InventariosContent = html.div(
+    html.h2("INVENTARIO"),
+    table
+)
