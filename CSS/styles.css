@@ -1,0 +1,107 @@
+header {
+  background-color: #f64323;
+  padding: 20px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.5rem; /* Tamaño de fuente en rem */
+  font-weight: bold;
+  display: flex;
+  justify-content: center; /* Centra horizontalmente el contenido en el header */
+  align-items: center; /* Centra verticalmente el contenido en el header */
+}
+
+ul {
+  list-style: none; /* Quita las viñetas de la lista */
+  padding: 0; /* Quita el espacio de relleno de la lista */
+  display: flex; /* Convierte la lista en un flex container */
+}
+
+li {
+  margin-right: 20px; /* Espaciado entre elementos de la lista */
+}
+
+a {
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none; /* Quita el subrayado de los enlaces */
+  color: #f5f5f5; /* Color del texto de los enlaces */
+}
+
+h2{
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+
+}
+body{
+  background-color: rgb(189, 189, 189);
+}
+
+/* Estilo para la tabla */
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
+}
+
+/* Estilo para las filas */
+.table tr {
+  background-color: #fff;
+  border-top: 1px solid #c6d2de;
+}
+
+/* Estilo para las celdas de encabezado */
+.table th {
+  font-weight: 600;
+  color: #333;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #c6d2de;
+  text-align: center;
+}
+
+/* Estilo para las celdas de datos */
+.table td {
+  color: #333;
+  text-align: center;
+}
+
+/* Estilo para las celdas resaltadas (por ejemplo, filas alternas) */
+.table tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+/* Estilo para la tabla en hover (resaltado al pasar el ratón) */
+.table tbody tr:hover {
+  background-color: #e2e2e2;
+}
+
+/* Estilo para las tablas de bordes */
+.table-bordered {
+  border: 1px solid #c6d2de;
+}
+
+/* Estilo para las celdas de borde */
+.table-bordered td,
+.table-bordered th {
+  border: 1px solid #c6d2de;
+}
+
+/* Estilo para las tablas con cabecera oscura */
+.table-dark {
+  color: #fff;
+  background-color: #343a40;
+}
+
+/* Estilo para las celdas de cabecera oscura */
+.table-dark th {
+  border-color: #454d55;
+}
+
+/* Estilo para las tablas con colores de encabezado alternos */
+.table-striped tbody tr:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+body{
+  font-family: Arial, Helvetica, sans-serif;
+}

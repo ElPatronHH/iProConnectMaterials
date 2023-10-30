@@ -1,0 +1,3 @@
+T3_B_0000P (Tier 3 - Pantallas) id, nombre pieza, cantidad, mínimo de venta, máximo de venta, punto de reorden, stock máximo
+T3_B_0000B (Tier 3 - Bocinas)
+T3_B_0000C (Tier 3 - Cables)
