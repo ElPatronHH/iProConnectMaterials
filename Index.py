@@ -14,10 +14,9 @@ from screens.Ajustes import Ajustes
 app = FastAPI()
 app.mount("/CSS", StaticFiles(directory="CSS"), name="CSS")
 
-############################################################
-#API
-from database.api import router as router_api
-############################################################    
+#
+from database.controladores import router as router_api
+# 
 
 @component
 def Index():

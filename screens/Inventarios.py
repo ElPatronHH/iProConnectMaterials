@@ -8,4 +8,6 @@ from content.InventariosContent import InventariosContent
 def Inventarios(context):
     context_value = use_context(context)
     
-    return Base((InventariosContent), context_value)
+    return Base((
+        InventariosContent()
+    ), context_value)
