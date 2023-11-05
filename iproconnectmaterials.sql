@@ -1,34 +1,3 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-CREATE TABLE `stock` (
-  `id` int(255) NOT NULL,
-  `descripcion` varchar(255) NOT NULL,
-  `numParte` int(255) NOT NULL,
-  `curentStock` int(255) NOT NULL,
-  `maxVenta` int(255) NOT NULL,
-  `minVenta` int(255) NOT NULL,
-  `puntoMax` int(255) NOT NULL,
-  `puntoReorden` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-ALTER TABLE `stock`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `stock`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
---T3_B_0000P (Tier 3 - Pantallas) 
---T3_B_0000B (Tier 3 - Bocinas)
---T3_B_0000C (Tier 3 - Cables)
---id, nombre pieza, cantidad, mínimo de venta, máximo de venta, punto de reorden, stock máximo
-INSERT INTO `stock`(`id`, `descripcion`, `numParte`, `currentStock`, `maxVenta`, `minVenta`, `puntoMax`, `puntoReorden`) VALUES ('','Pantallas','T3_B_0000P','50','10','50','20','500');
-INSERT INTO `stock`(`id`, `descripcion`, `numParte`, `currentStock`, `maxVenta`, `minVenta`, `puntoMax`, `puntoReorden`) VALUES ('','Bocinas','T3_B_0000B','50','10','50','20','500');
-INSERT INTO `stock`(`id`, `descripcion`, `numParte`, `currentStock`, `maxVenta`, `minVenta`, `puntoMax`, `puntoReorden`) VALUES ('','Cables','T3_B_0000C','50','10','50','20','500');
-
-
 --2.0
 -- Tabla Productos
 CREATE TABLE productos (
@@ -52,20 +21,7 @@ CREATE TABLE compras (
     productos_medida VARCHAR(50),
     fecha DATE,
     precio_total DECIMAL(10, 2),
-    FOREIGN KEY (producto_id) REFERENCES Productos(id)
-);
-
--- Tabla Pedidos
-CREATE TABLE pedidos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    producto_id INT,
-    fecha_pedido DATE,
-    fecha_entrega DATE,
-    cantidad INT,
-    cantidad_total INT,
-    metodo_pago VARCHAR(50),
-    status VARCHAR(20),
-    FOREIGN KEY (producto_id) REFERENCES Productos(id)
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
 
 -- Tabla Logistica
@@ -77,7 +33,7 @@ CREATE TABLE logistica (
     metodoPago VARCHAR(50),
     precio DECIMAL(10, 2),
     status VARCHAR(20),
-    FOREIGN KEY (pedido_id) REFERENCES Pedidos(id)
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
 );
 
 -- Tabla Ventas
@@ -86,8 +42,32 @@ CREATE TABLE ventas (
     pedido_id INT,
     pedidos_cantidad_total INT,
     pedidos_metodo_pago VARCHAR(50),
-    FOREIGN KEY (pedido_id) REFERENCES Pedidos(id)
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
 );
+
+-- Tabla Pedidos
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT,
+    cantidad_total INT,
+    status VARCHAR(20),
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
+);
+
+-- Tabla Pedidos Entrantes
+CREATE TABLE pedidoentrante (
+    id INT AUTO_INCREMENT PRIMARY KEY,  
+    pedido_id INT
+    producto_id INT,                    
+    fecha_pedido DATE,                  
+    fecha_entrega DATE,                 
+    cantidad INT,                                   
+    metodo_pago VARCHAR(50),           
+    FOREIGN KEY (producto_id) REFERENCES productos(id),
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+);
+
+
 
 
 
@@ -103,6 +83,11 @@ CREATE TABLE pedidoentrante (
     FOREIGN KEY (producto_id) REFERENCES Productos(id)
 );
 
+
+
+
+
+--EJEMPLO DE SOLICITUD POST PARA PEDIDO
 [
   {
     "id":1, --Este, ¿Cómo ves?, creo que puede ser un auto increment en nuestro sistema, entonces quizá no lo tengas que proporcionar.
@@ -119,5 +104,24 @@ CREATE TABLE pedidoentrante (
     "fecha_pedido":"2023-01-10", -- Esta que sea la fecha del día que se manda, la recuperas en tu código plx
     "fecha_entrega":"2023-01-10", -- Para cuando ocupas el material
     "metodo_pago":"Tarjeta" --Tarjeta o no sé, eso lo dijo el profe, queda pendiente preguntar los tipos de pago aceptados xd
+  }
+]
+
+[
+  {
+    "id":1, 
+    "productos":[
+      {
+        "id":1, 
+        "cantidad":"200", 
+      },
+      {
+        "id":2, 
+        "cantidad":"300", 
+      }
+    ],
+    "fecha_pedido":"2023-01-10",
+    "fecha_entrega":"2023-01-10", 
+    "metodo_pago":"Tarjeta"
   }
 ]

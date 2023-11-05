@@ -10,13 +10,12 @@ from screens.App import App
 from screens.HistorialPedidos import HistorialPedidos
 from screens.Inventarios import Inventarios
 from screens.Ajustes import Ajustes
+from screens.PedidosEntrantes import PedidosEntrantes
+
+from database.controladores import router as router_api
 
 app = FastAPI()
 app.mount("/CSS", StaticFiles(directory="CSS"), name="CSS")
-
-#
-from database.controladores import router as router_api
-# 
 
 @component
 def Index():
@@ -24,7 +23,8 @@ def Index():
 
     return simple.router(
         route("/", App(context)),
-        route("/historial_de_pedidos", HistorialPedidos(context)),
+        route("/pedidosentrantes", PedidosEntrantes(context)),
+        route("/historialpedidos", HistorialPedidos(context)),
         route("/inventarios",Inventarios(context)),  # Añade await aquí
         route("/ajustes", Ajustes(context))
     )

@@ -1,5 +1,4 @@
 from fastapi import APIRouter, HTTPException, Depends, status, Request
-from pydantic import BaseModel
 from typing import Annotated
 import models
 from database.database import engine, SessionLocal
@@ -17,6 +16,7 @@ def get_db():
         db.close()
         
 db_dependency = Annotated[Session, Depends(get_db)]
+
 ##Éstas son algo así como las consultas a la base de datos, que se alojan en la ruta que marca, no son métodos que se llamen tal cual
 @router.get("/stock/{stock_id}", status_code=status.HTTP_200_OK)
 async def read_uniqueStock(stock_id: int, db: db_dependency):
@@ -56,3 +56,8 @@ async def create_pedido_entrante(request: Request, db: db_dependency):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/backend/pedidosEntrantes", status_code=status.HTTP_200_OK)
+async def read_pedidosEntrantes(db: db_dependency):
+    pedidos = db.query(models.PedidoEntrante).all()
+    return pedidos

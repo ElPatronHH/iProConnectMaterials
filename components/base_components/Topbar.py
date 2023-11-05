@@ -7,7 +7,10 @@ Topbar = (
                 html.a({"href": "/"},
                        "iProConnectMaterials")),
             html.li(
-                html.a({"href": "/historial_de_pedidos"},
+                html.a({"href": "/pedidosentrantes"},
+                       "Pedidos Entrantes")),
+            html.li(
+                html.a({"href": "/historialpedidos"},
                        "Historial de Pedidos")),
             html.li(
                 html.a({"href": "/inventarios"},
