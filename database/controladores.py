@@ -26,13 +26,13 @@ async def read_uniqueStock(stock_id: int, db: db_dependency):
     return stock
 
 #Lee la tabla de productos, pai
-@router.get("/stockfull", status_code=status.HTTP_200_OK)
+@router.get("/backend/stockfull", status_code=status.HTTP_200_OK)
 async def read_fullStock(db: db_dependency):
     stocks = db.query(models.Productos).all()
     return stocks
 
 #Este postea un pedido entrante con el formato JSON, las fechas y el id son el mismo, pero inserta múltiples registros por producto
-@router.post("/pedidoEntrante", status_code=status.HTTP_201_CREATED)
+@router.post("/backend/pedidoEntrante", status_code=status.HTTP_201_CREATED)
 async def create_pedido_entrante(request: Request, db: db_dependency):
     try:
         data = await request.json()

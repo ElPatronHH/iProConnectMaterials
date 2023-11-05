@@ -10,6 +10,9 @@ Topbar = (
                 html.a({"href": "/pedidosentrantes"},
                        "Pedidos Entrantes")),
             html.li(
+                html.a({"href": "/pedidosencurso"},
+                       "Pedidos en Curso")),
+            html.li(
                 html.a({"href": "/historialpedidos"},
                        "Historial de Pedidos")),
             html.li(

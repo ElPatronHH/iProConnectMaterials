@@ -3,7 +3,7 @@ from database.api import getPedidosEntrantes
 
 
 @component
-def PedidosEntrantesContent():
+def PedidosEnCursoContent():
     pedidos, set_pedidos = use_state([])
 
     async def fillItems():
@@ -54,7 +54,7 @@ def PedidosEntrantesContent():
         )
 
     return html.div(
-        html.h2({"class":"titulo-pantalla"},"PEDIDOS ENTRANTES"),
+        html.h2({"class":"titulo-pantalla"},"PEDIDOS EN CURSO"),
         html.div({"class": "pedidos-container"}, [render_pedidosEntrantes_item(pedido_item)
                  for pedido_item in pedidos])
     )

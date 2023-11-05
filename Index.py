@@ -11,6 +11,7 @@ from screens.HistorialPedidos import HistorialPedidos
 from screens.Inventarios import Inventarios
 from screens.Ajustes import Ajustes
 from screens.PedidosEntrantes import PedidosEntrantes
+from screens.PedidosEnCurso import PedidosEnCurso
 
 from database.controladores import router as router_api
 
@@ -24,6 +25,7 @@ def Index():
     return simple.router(
         route("/", App(context)),
         route("/pedidosentrantes", PedidosEntrantes(context)),
+        route("/pedidosencurso", PedidosEnCurso(context)),
         route("/historialpedidos", HistorialPedidos(context)),
         route("/inventarios",Inventarios(context)),  # Añade await aquí
         route("/ajustes", Ajustes(context))

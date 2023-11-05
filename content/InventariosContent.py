@@ -15,7 +15,7 @@ def InventariosContent():
         return html.li(
             {
                 "key": stock_item["id"],
-                "class_name": "card card-body mb-2"
+                "class": "card card-body mb-2"
             },
             html.p({"class_name": "fw-bold h3"}, stock_item["descripcion"]),
             html.p(f"ID: {stock_item['id']}"),
@@ -26,7 +26,7 @@ def InventariosContent():
         )
 
     return html.div(
-        html.h2("INVENTARIO"),
+        html.h2({"class":"titulo-pantalla"},"INVENTARIO"),
         html.ul([render_stock_item(stock_item) for stock_item in stock])
     )
 
