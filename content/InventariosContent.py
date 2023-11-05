@@ -19,10 +19,10 @@ def InventariosContent():
             },
             html.p({"class_name": "fw-bold h3"}, stock_item["descripcion"]),
             html.p(f"ID: {stock_item['id']}"),
-            html.p(f"Stock actual: {stock_item['currentStock']}"),
-            html.p(f"Stock mínimo para la venta: {stock_item['minVenta']}"),
-            html.p(f"Punto de reorden: {stock_item['puntoReorden']}"),
-            html.p(f"Stock máximo para la venta: {stock_item['maxVenta']}")
+            html.p(f"Nombre: {stock_item['nombre']}"),
+            html.p(f"Descripción: {stock_item['descripcion']}"),
+            html.p(f"Precio de compra: {stock_item['precio_compra']}"),
+            html.p(f"Precio de venta: {stock_item['precio_venta']}")
         )
 
     return html.div(
@@ -30,36 +30,3 @@ def InventariosContent():
         html.ul([render_stock_item(stock_item) for stock_item in stock])
     )
 
-
-"""
-sel = select(stock_table.c.id, stock_table.c.numParte, stock_table.c.descripcion, stock_table.c.currentStock)
-resultados = conexion.execute(sel)  
-
-table = html.table({"class":"table"},
-    html.thead(
-        html.tr(
-            html.th("ID"),
-            html.th("Número de Parte"),
-            html.th("Descripción"),
-            html.th("Stock actual"),
-            
-        ),
-    ),
-    html.tbody(
-        [
-            html.tr(
-                html.td(fila[0]), 
-                html.td(fila[1]), 
-                html.td(fila[2]),  
-                html.td(fila[3]),
-            )
-            for fila in resultados
-        ],
-    ),
-)
-
-InventariosContent = html.div(
-    html.h2("INVENTARIO"),
-    table
-)
-"""
