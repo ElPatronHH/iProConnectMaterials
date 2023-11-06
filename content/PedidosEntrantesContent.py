@@ -29,10 +29,7 @@ def PedidosEntrantesContent():
                 html.div({"class": "card-title"},
                          f"Producto: {pedido_item['producto_id']}"),
                 html.p(f"Cantidad: {pedido_item['cantidad']}"),
-                html.p(f"Fecha del pedido: {pedido_item['fecha_pedido']}"),
-                html.p(
-                    f"Fecha de entrega solicitada: {pedido_item['fecha_entrega']}"),
-                html.p(f"Método de pago: {pedido_item['metodo_pago']}")
+
             )
         )
 
@@ -45,28 +42,28 @@ def PedidosEntrantesContent():
 
     cards = []
     for pedido_id, grupo_pedidos in grouped_pedidos.items():
-        cards.append(html.div(
-            {"class": "grupo-tarjeta"},
-            html.h5({"class": "card-title"},
-                    html.div({"class": "botonera-card"},
-                             f"Pedido {pedido_id}"),
-                    html.button(
-                {
-                    "class": "btn btn-primary",
-                    # "onclick": lambda event: accept_pedido(pedido_item)
-                },
-                "Aceptar"
-            ),
-                html.button(
-                {
-                    "class": "btn btn-danger",
-                    # "onclick": lambda event: reject_pedido(pedido_item)
-                },
-                "Rechazar"
-            )),
-            [render_pedidosEntrantes_item(pedido_item)
-             for pedido_item in grupo_pedidos]
-        ))
+        cards.append(html.div({"class": "grupo-tarjeta"},
+                        html.h5({"class": "card-title"},
+                            html.div({"class": "botonera-card"},
+                                f"Pedido {pedido_id}"),
+                            html.p(f"Fecha del pedido: {pedido_item ['fecha_pedido']}"),
+                            html.p(f"Fecha de entrega solicitada: {pedido_item['fecha_entrega']}"),
+                            html.p(f"Método de pago: {pedido_item['metodo_pago']}"),
+                            html.button({"class": "btn btn-primary",
+                                # "onclick": lambda event: accept_pedido(pedido_item)
+                                },
+                                "Aceptar"
+                            ),
+                            html.button({"class": "btn btn-danger",
+                                # "onclick": lambda event: reject_pedido(pedido_item)
+                                },
+                                "Rechazar"
+                            )
+                        ),
+                    [render_pedidosEntrantes_item(pedido_item)
+                    for pedido_item in grupo_pedidos]
+                    )
+        )
 
     return html.div(
         html.h2({"class": "titulo-pantalla"}, "PEDIDOS ENTRANTES"),
