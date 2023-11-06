@@ -91,7 +91,7 @@ INSERT INTO pedidoentrante (pedido_id, producto_id, fecha_pedido, fecha_entrega,
 VALUES (1, 1, '2023-11-05', '2023-11-15', 30, 'Efectivo');
 
 
---3.0
+--3.0 Explicación, no importa
 -- Tabla Pedidos
 CREATE TABLE pedidoentrante (
     id INT AUTO_INCREMENT PRIMARY KEY,  --auto, pero debe coincidir si se mandan varios productos en un solo pedido
@@ -106,15 +106,16 @@ CREATE TABLE pedidoentrante (
 --EJEMPLO DE SOLICITUD POST PARA PEDIDO
 [
   {
+    "pedido_id":1, --Aquí para aclarar que todo es parte del mismo pedido.
     "id":1, --Este, ¿Cómo ves?, creo que puede ser un auto increment en nuestro sistema, entonces quizá no lo tengas que proporcionar.
     "productos":[
       {
         "id":1, --Te voy a pasar los id de nuestro "catálogo"
-        "cantidad":"200", --Cuántos de ese material
+        "cantidad":"200" --Cuántos de ese material
       },
       {
         "id":2, --Te voy a pasar los id de nuestro "catálogo"
-        "cantidad":"300", --Cuántos de ese material
+        "cantidad":"300" --Cuántos de ese material
       }
     ],
     "fecha_pedido":"2023-01-10", -- Esta que sea la fecha del día que se manda, la recuperas en tu código plx
@@ -125,15 +126,15 @@ CREATE TABLE pedidoentrante (
 
 [
   {
-    "id":1, 
+    "pedido_id":1, 
     "productos":[
       {
         "id":1, 
-        "cantidad":"200", 
+        "cantidad":"200" 
       },
       {
         "id":2, 
-        "cantidad":"300", 
+        "cantidad":"300" 
       }
     ],
     "fecha_pedido":"2023-01-10",
