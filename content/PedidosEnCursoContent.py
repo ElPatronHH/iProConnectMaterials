@@ -34,24 +34,8 @@ def PedidosEnCursoContent():
                 html.p(
                     f"Fecha de entrega solicitada: {pedido_item['fecha_entrega']}"),
                 html.p(f"Método de pago: {pedido_item['metodo_pago']}"),
-                html.div({"class":"botonera-card"},
-                html.button(
-                    {
-                        "class": "btn btn-primary",
-                        "onclick": lambda event: accept_pedido(pedido_item['id'])
-                    },
-                    "Aceptar"
-                ),
-                html.button(
-                    {
-                        "class": "btn btn-danger",
-                        "onclick": lambda event: reject_pedido(pedido_item['id'])
-                    },
-                    "Rechazar"
-                ))
-            ),
-
-        )
+                )
+            )
 
     return html.div(
         html.h2({"class":"titulo-pantalla"},"PEDIDOS EN CURSO"),

@@ -44,11 +44,12 @@ def PedidosEntrantesContent():
     for pedido_id, grupo_pedidos in grouped_pedidos.items():
         cards.append(html.div({"class": "grupo-tarjeta"},
                         html.h5({"class": "card-title"},
-                            html.div({"class": "botonera-card"},
-                                f"Pedido {pedido_id}"),
+                                f"Pedido {pedido_id}",
+                            html.h5({"class": "card-title2"},
                             html.p(f"Fecha del pedido: {pedido_item ['fecha_pedido']}"),
                             html.p(f"Fecha de entrega solicitada: {pedido_item['fecha_entrega']}"),
                             html.p(f"Método de pago: {pedido_item['metodo_pago']}"),
+                            html.div({"class":"botonera-card"},
                             html.button({"class": "btn btn-primary",
                                 # "onclick": lambda event: accept_pedido(pedido_item)
                                 },
@@ -59,7 +60,7 @@ def PedidosEntrantesContent():
                                 },
                                 "Rechazar"
                             )
-                        ),
+                        ))),
                     [render_pedidosEntrantes_item(pedido_item)
                     for pedido_item in grupo_pedidos]
                     )

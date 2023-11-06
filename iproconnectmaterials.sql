@@ -82,7 +82,7 @@ INSERT INTO compras (producto_id, cantidad, productos_precio_compra, productos_m
 VALUES (1, 50, 10.00, 'Unidad', '2023-11-05', 500.00);
 
 INSERT INTO pedidos (producto_id, cantidad_total, status)
-VALUES (1, 20, 'En espera');
+VALUES ('', 20, 'En espera');
 
 INSERT INTO ventas (pedido_id, pedidos_cantidad_total, pedidos_metodo_pago)
 VALUES (1, 20, 'Tarjeta de crédito');
@@ -142,3 +142,5 @@ CREATE TABLE pedidoentrante (
     "metodo_pago":"Tarjeta"
   }
 ]
+
+http://127.0.0.1:8000/backend/pedidoEntrante
