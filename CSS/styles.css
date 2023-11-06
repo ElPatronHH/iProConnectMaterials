@@ -1,5 +1,5 @@
 header {
-  background-color: #f64323;
+  background-color: rgb(42, 54, 189);
   padding: 20px;
   color: #ffffff;
   text-align: center;
@@ -8,6 +8,7 @@ header {
   display: flex;
   justify-content: center; 
   align-items: center; 
+  border: 1px solid gray;
 }
 
 ul {
@@ -17,7 +18,7 @@ ul {
 }
 
 li {
-  margin-right: 20px; 
+  margin-right: 20px;
 }
 
 a {
@@ -31,8 +32,9 @@ h2{
   text-align: center;
 }
 .titulo-pantalla{
-  background-color: #f64323;
+  background-color: rgb(42, 54, 189);
   color: white;
+  border: 1px solid gray;
 }
 body{
   background-color: rgb(189, 189, 189);
@@ -45,9 +47,22 @@ body{
 .pedidos-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  width: 300px;
+  transition: transform 0.2s;
+  background-color: #fff;
+  justify-content: center;
+}
+
+.cardv2 {
+  vertical-align: middle;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -66,6 +81,7 @@ body{
   background-color: lightgrey;
   border: 1px solid gray;
   border-radius: 5px;
+  margin: 10px;
 }
 .card-title2 {
   padding: 6px;
@@ -76,9 +92,14 @@ body{
 .card:hover {
   transform: scale(1.05);
 }
-
+.cardv2:hover {
+  transform: scale(1.05);
+}
+.centered-p {
+  text-align: center;
+}
 .card-title {
-  background-color: #f64323;
+  background-color: rgb(42, 54, 189);
   color: #fff;
   font-size: 1.25rem;
   padding: 10px;

@@ -70,27 +70,50 @@ CREATE TABLE logistica (
 
 --Datos de Prueba
 INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
-VALUES ('Producto A', 'Descripción del Producto A', 'Unidad', 10.00, 20.00, 100, 10, 'Disponible');
+VALUES ('T3_B_0COB0', 'Cobre', 'Unidad', 10.00, 20.00, 100, 10, 'Disponible');
 
 INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
-VALUES ('Producto B', 'Descripción del Producto B', 'Unidad', 15.00, 25.00, 150, 20, 'Disponible');
+VALUES ('T3_B_0ALU1', 'Aluminio', 'Unidad', 15.00, 25.00, 150, 20, 'Disponible');
 
 INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
-VALUES ('Producto C', 'Descripción del Producto C', 'Kilogramo', 5.00, 10.00, 50, 5, 'Agotado');
+VALUES ('T3_B_0SIL2', 'Silicio', 'Kilogramo', 5.00, 10.00, 50, 5, 'Disponible');
+
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
+VALUES ('T3_B_0ORO3', 'Oro', 'Kilogramo', 5.00, 10.00, 50, 5, 'Disponible');
+
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
+VALUES ('T3_B_0EST4', 'Estaño', 'Kilogramo', 5.00, 10.00, 50, 5, 'Disponible');
+
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
+VALUES ('T3_B_0PLA5', 'Plata', 'Kilogramo', 5.00, 10.00, 50, 5, 'Disponible');
+
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
+VALUES ('T3_B_0VID6', 'Vidrio', 'Kilogramo', 5.00, 10.00, 50, 5, 'Disponible');
+
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
+VALUES ('T3_B_0LIT7', 'Litio', 'Kilogramo', 5.00, 10.00, 50, 5, 'Disponible');
+
 
 INSERT INTO compras (producto_id, cantidad, productos_precio_compra, productos_medida, fecha, precio_total)
 VALUES (1, 50, 10.00, 'Unidad', '2023-11-05', 500.00);
 
 INSERT INTO pedidos (producto_id, cantidad_total, status)
-VALUES ('', 20, 'En espera');
-
+VALUES (default, 20, 'En espera');
+INSERT INTO pedidos (producto_id, cantidad_total, status)
+VALUES (default, 20, 'En espera');
+INSERT INTO pedidos (producto_id, cantidad_total, status)
+VALUES (default, 20, 'En espera');
 INSERT INTO ventas (pedido_id, pedidos_cantidad_total, pedidos_metodo_pago)
 VALUES (1, 20, 'Tarjeta de crédito');
 
 INSERT INTO pedidoentrante (pedido_id, producto_id, fecha_pedido, fecha_entrega, cantidad, metodo_pago)
-VALUES (1, 1, '2023-11-05', '2023-11-15', 30, 'Efectivo');
+VALUES (default, 1, '2023-11-05', '2023-11-15', 30, 'Efectivo');
+INSERT INTO pedidoentrante (pedido_id, producto_id, fecha_pedido, fecha_entrega, cantidad, metodo_pago)
+VALUES (default, 2, '2023-11-05', '2023-11-15', 30, 'Efectivo');
+INSERT INTO pedidoentrante (pedido_id, producto_id, fecha_pedido, fecha_entrega, cantidad, metodo_pago)
+VALUES (default, 3, '2023-11-05', '2023-11-15', 30, 'Efectivo');
 
-
+--T3_B_00000 (Tier 3 Proveedor pantallas )
 --3.0 Explicación, no importa
 -- Tabla Pedidos
 CREATE TABLE pedidoentrante (
