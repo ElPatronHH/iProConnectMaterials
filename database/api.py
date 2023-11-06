@@ -1,5 +1,6 @@
 import httpx
 
+
 async def getStock():
     async with httpx.AsyncClient() as client:
         response = await client.get("http://localhost:8000/backend/stockfull")
@@ -7,7 +8,8 @@ async def getStock():
     if response.status_code == 200:
         result = response.json()
         return result
-    
+
+
 async def getPedidosEntrantes():
     async with httpx.AsyncClient() as client:
         response = await client.get("http://localhost:8000/backend/pedidosEntrantes")

@@ -4,8 +4,9 @@ from components.Base import Base
 
 from content.Main import Main
 
+
 @component
 def App(context):
     context_value = use_context(context)
-    
+
     return Base((Main), context_value)

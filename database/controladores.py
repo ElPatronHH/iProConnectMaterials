@@ -8,35 +8,39 @@ router = APIRouter()
 
 models.DataBase.metadata.create_all(bind=engine)
 
+
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
-        
+
+
 db_dependency = Annotated[Session, Depends(get_db)]
 
-##Éstas son algo así como las consultas a la base de datos, que se alojan en la ruta que marca, no son métodos que se llamen tal cual
+# Éstas son algo así como las consultas a la base de datos, que se alojan en la ruta que marca, no son métodos que se llamen tal cual
 @router.get("/stock/{stock_id}", status_code=status.HTTP_200_OK)
 async def read_uniqueStock(stock_id: int, db: db_dependency):
-    stock = db.query(models.Productos).filter(models.Productos.id == stock_id).first()
+    stock = db.query(models.Productos).filter(
+        models.Productos.id == stock_id).first()
     if stock is None:
         raise HTTPException(status_code=404, detail='Stock not Found')
     return stock
 
-#Lee la tabla de productos, pai
+# Lee la tabla de productos, pai
 @router.get("/backend/stockfull", status_code=status.HTTP_200_OK)
 async def read_fullStock(db: db_dependency):
     stocks = db.query(models.Productos).all()
     return stocks
 
-#Este postea un pedido entrante con el formato JSON, las fechas y el id son el mismo, pero inserta múltiples registros por producto
+# Este postea un pedido entrante con el formato JSON, las fechas y el id son el mismo, pero inserta múltiples registros por producto
 @router.post("/backend/pedidoEntrante", status_code=status.HTTP_201_CREATED)
 async def create_pedido_entrante(request: Request, db: db_dependency):
     try:
         data = await request.json()
         for pedido_data in data:
+            pedido_id = pedido_data["pedido_id"]
             fecha_pedido = pedido_data["fecha_pedido"]
             fecha_entrega = pedido_data["fecha_entrega"]
             metodo_pago = pedido_data["metodo_pago"]
@@ -44,6 +48,7 @@ async def create_pedido_entrante(request: Request, db: db_dependency):
                 producto_id = producto_data["id"]
                 cantidad = producto_data["cantidad"]
                 nuevo_pedido = models.PedidoEntrante(
+                    pedido_id=pedido_id,
                     producto_id=producto_id,
                     fecha_pedido=fecha_pedido,
                     fecha_entrega=fecha_entrega,
@@ -52,11 +57,12 @@ async def create_pedido_entrante(request: Request, db: db_dependency):
                 )
                 db.add(nuevo_pedido)
                 db.commit()
-        return {"message": "Pedidos entrantes creados exitosamente, perro!"}
+        return {"message": "Pedidos entrantes creados exitosamente, papito!"}
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
 
+# Este retorna todos los pedidos entrantes
 @router.get("/backend/pedidosEntrantes", status_code=status.HTTP_200_OK)
 async def read_pedidosEntrantes(db: db_dependency):
     pedidos = db.query(models.PedidoEntrante).all()

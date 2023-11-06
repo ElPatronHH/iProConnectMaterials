@@ -41,6 +41,7 @@ class PedidoEntrante(DataBase):
     __tablename__ = 'pedidoentrante'
     
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    pedido_id = Column(String, ForeignKey('pedidos.id'))
     producto_id = Column(Integer, ForeignKey('productos.id'))
     fecha_pedido = Column(Date)
     fecha_entrega = Column(Date)

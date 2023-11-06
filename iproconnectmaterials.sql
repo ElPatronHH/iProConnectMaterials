@@ -24,6 +24,37 @@ CREATE TABLE compras (
     FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
 
+-- Tabla Pedidos
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT,
+    cantidad_total INT,
+    status VARCHAR(20),
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
+);
+
+-- Tabla Ventas
+CREATE TABLE ventas (
+    venta_id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT,
+    pedidos_cantidad_total INT,
+    pedidos_metodo_pago VARCHAR(50),
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+);
+
+-- Tabla Pedidos Entrantes
+CREATE TABLE pedidoentrante (
+    id INT AUTO_INCREMENT PRIMARY KEY,  
+    pedido_id INT,
+    producto_id INT,                    
+    fecha_pedido DATE,                  
+    fecha_entrega DATE,                 
+    cantidad INT,                                   
+    metodo_pago VARCHAR(50),           
+    FOREIGN KEY (producto_id) REFERENCES productos(id),
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+);
+
 -- Tabla Logistica
 CREATE TABLE logistica (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,39 +67,28 @@ CREATE TABLE logistica (
     FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
 );
 
--- Tabla Ventas
-CREATE TABLE ventas (
-    venta_id INT AUTO_INCREMENT PRIMARY KEY,
-    pedido_id INT,
-    pedidos_cantidad_total INT,
-    pedidos_metodo_pago VARCHAR(50),
-    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
-);
 
--- Tabla Pedidos
-CREATE TABLE pedidos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    producto_id INT,
-    cantidad_total INT,
-    status VARCHAR(20),
-    FOREIGN KEY (producto_id) REFERENCES productos(id)
-);
+--Datos de Prueba
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
+VALUES ('Producto A', 'Descripción del Producto A', 'Unidad', 10.00, 20.00, 100, 10, 'Disponible');
 
--- Tabla Pedidos Entrantes
-CREATE TABLE pedidoentrante (
-    id INT AUTO_INCREMENT PRIMARY KEY,  
-    pedido_id INT
-    producto_id INT,                    
-    fecha_pedido DATE,                  
-    fecha_entrega DATE,                 
-    cantidad INT,                                   
-    metodo_pago VARCHAR(50),           
-    FOREIGN KEY (producto_id) REFERENCES productos(id),
-    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
-);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
+VALUES ('Producto B', 'Descripción del Producto B', 'Unidad', 15.00, 25.00, 150, 20, 'Disponible');
 
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, cantidad_max, cantidad_min, status)
+VALUES ('Producto C', 'Descripción del Producto C', 'Kilogramo', 5.00, 10.00, 50, 5, 'Agotado');
 
+INSERT INTO compras (producto_id, cantidad, productos_precio_compra, productos_medida, fecha, precio_total)
+VALUES (1, 50, 10.00, 'Unidad', '2023-11-05', 500.00);
 
+INSERT INTO pedidos (producto_id, cantidad_total, status)
+VALUES (1, 20, 'En espera');
+
+INSERT INTO ventas (pedido_id, pedidos_cantidad_total, pedidos_metodo_pago)
+VALUES (1, 20, 'Tarjeta de crédito');
+
+INSERT INTO pedidoentrante (pedido_id, producto_id, fecha_pedido, fecha_entrega, cantidad, metodo_pago)
+VALUES (1, 1, '2023-11-05', '2023-11-15', 30, 'Efectivo');
 
 
 --3.0
@@ -82,10 +102,6 @@ CREATE TABLE pedidoentrante (
     metodo_pago VARCHAR(50),            --formato de pago
     FOREIGN KEY (producto_id) REFERENCES Productos(id)
 );
-
-
-
-
 
 --EJEMPLO DE SOLICITUD POST PARA PEDIDO
 [

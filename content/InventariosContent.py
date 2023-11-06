@@ -17,9 +17,8 @@ def InventariosContent():
                 "key": stock_item["id"],
                 "class": "card card-body mb-2"
             },
-            html.p({"class_name": "fw-bold h3"}, stock_item["descripcion"]),
+            html.p({"class": "card-title"}, stock_item["nombre"]),
             html.p(f"ID: {stock_item['id']}"),
-            html.p(f"Nombre: {stock_item['nombre']}"),
             html.p(f"Descripción: {stock_item['descripcion']}"),
             html.p(f"Precio de compra: {stock_item['precio_compra']}"),
             html.p(f"Precio de venta: {stock_item['precio_venta']}")
