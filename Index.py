@@ -27,7 +27,7 @@ def Index():
         route("/pedidosentrantes", PedidosEntrantes(context)),
         route("/pedidosencurso", PedidosEnCurso(context)),
         route("/historialpedidos", HistorialPedidos(context)),
-        route("/inventarios",Inventarios(context)),  # Añade await aquí
+        route("/inventarios",Inventarios(context)),  
         route("/ajustes", Ajustes(context))
     )
 

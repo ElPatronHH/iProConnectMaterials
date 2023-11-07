@@ -10,14 +10,12 @@ router = APIRouter()
 
 models.DataBase.metadata.create_all(bind=engine)
 
-
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
-
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
