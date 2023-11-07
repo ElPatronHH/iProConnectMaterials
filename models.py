@@ -1,53 +1,53 @@
-from sqlalchemy import Column, Integer, String, DECIMAL, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, DECIMAL, Date, Enum, ForeignKey
 from database.database import DataBase
 
 class Productos(DataBase):
     __tablename__ = 'productos'
     
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-    nombre = Column(String(255))
-    descripcion = Column(String(255))
-    medida = Column(String(50))
-    precio_compra = Column(DECIMAL(10, 2))
-    precio_venta = Column(DECIMAL(10, 2))
+    nombre = Column(String(20))
+    descripcion = Column(String(20))
+    medida = Column(String(20))
+    precio_compra = Column(Integer)
+    precio_venta = Column(Integer)
+    stock = Column(Integer)
     cantidad_max = Column(Integer)
     cantidad_min = Column(Integer)
-    status = Column(String(20))
-
-class Compras(DataBase):
-    __tablename__ = 'compras'
-    
-    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-    producto_id = Column(Integer, ForeignKey('productos.id'))
-    cantidad = Column(Integer)
-    productos_precio_compra = Column(DECIMAL(10, 2))
-    productos_medida = Column(String(50))
-    fecha = Column(Date)
-    precio_total = Column(DECIMAL(10, 2))
+    venta_max = Column(Integer)
+    venta_min = Column(Integer)
+    status = Column(Integer)
 
 class Pedidos(DataBase):
     __tablename__ = 'pedidos'
     
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-    producto_id = Column(Integer, ForeignKey('productos.id'))
     fecha_pedido = Column(Date)
     fecha_entrega = Column(Date)
-    cantidad = Column(Integer)
-    cantidad_total = Column(Integer)
-    metodo_pago = Column(String(50))
-    status = Column(String(20))
+    metodo_pago = Column(String(20))
+    total = Column(Integer)
+    status = Column(Enum('ENTRANTE', 'EN CURSO', 'HISTORIAL'))
+    motivo = Column(String(200))
     
-class PedidoEntrante(DataBase):
-    __tablename__ = 'pedidoentrante'
+class Detalle_P (DataBase):
+    __tablename__ = 'detalle_p'
     
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-    pedido_id = Column(String, ForeignKey('pedidos.id'))
-    producto_id = Column(Integer, ForeignKey('productos.id'))
-    fecha_pedido = Column(Date)
-    fecha_entrega = Column(Date)
+    id_pedido = Column(Integer, ForeignKey('pedidos.id'))
+    id_producto = Column(Integer, ForeignKey('productos.id'))
+    precio = Column(Integer)
     cantidad = Column(Integer)
-    metodo_pago = Column(String(50))
-
+    
+    
+class Compras(DataBase):
+    __tablename__ = 'compras'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    id_producto = Column(Integer, ForeignKey('productos.id'))
+    cantidad = Column(Integer)
+    fecha = Column(Date)
+    precio_total = Column(Integer)
+    
+"""
 class Logistica(DataBase):
     __tablename__ = 'logistica'
     
@@ -65,4 +65,4 @@ class Ventas(DataBase):
     venta_id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     pedido_id = Column(Integer, ForeignKey('pedidos.id'))
     pedidos_cantidad_total = Column(Integer)
-    pedidos_metodo_pago = Column(String(50))
+    pedidos_metodo_pago = Column(String(50))"""

@@ -1,7 +1,6 @@
 from reactpy import html, component, use_state, use_effect
 from database.api import getPedidosEntrantes
 
-
 @component
 def PedidosEntrantesContent():
     pedidos, set_pedidos = use_state([])
@@ -12,12 +11,63 @@ def PedidosEntrantesContent():
 
     use_effect(fillItems, [])
 
-    def accept_pedido(pedido_id):
-        print("Pedido Aceptado.")
+    def accept_pedido(id_pedido):
+        print(f"Pedido Aceptado: {id_pedido}")
 
-    def reject_pedido(pedido_id):
-        print("Pedido Rechazado.")
+    def reject_pedido(id_pedido):
+        print(f"Pedido Rechazado: {id_pedido}")
 
+    def render_detalle_pedido(detalle_pedido):
+        return html.div(
+            {"class": "detalle-pedido"},
+            html.p(f"Producto: {detalle_pedido['producto']['nombre']}"),
+            html.p(f"Precio Unitario: ${detalle_pedido['precio']}"),  # Cambio aquí
+        )
+
+    def render_pedidosEntrantes_item(pedido_item):
+        detalles_pedido = pedido_item['detalle_pedido']
+        return html.div(
+            {
+                "key": pedido_item["pedido"]["id"],
+                "class": "card card-body mb-2"
+            },
+            html.div(
+                {"class": "card-body"},
+                html.div({"class": "card-title"},
+                         f"ID del Pedido: {pedido_item['pedido']['id']}"),
+                html.p(f"Fecha del Pedido: {pedido_item['pedido']['fecha_pedido']}"),
+                html.p(f"Fecha de Entrega Deseada: {pedido_item['pedido']['fecha_entrega']}"),
+                html.p(f"Método de Pago: {pedido_item['pedido']['metodo_pago']}"),
+                html.p(f"Total: ${pedido_item['pedido']['total']}"),
+                html.div({"class": "detalle-pedido-container"},
+                    [render_detalle_pedido(detalle) for detalle in detalles_pedido]
+                ),
+                html.div({"class": "botonera-card"},
+                     html.button({"class": "btn btn-primary",
+                                  #"onclick": lambda event: accept_pedido(pedido_item['pedido']['id'])
+                                  },
+                                 "Aceptar"
+                                 ),
+                     html.button({"class": "btn btn-danger",
+                                  #"onclick": lambda event: reject_pedido(pedido_item['pedido']['id'])
+                                  },
+                                 "Rechazar"
+                                 )
+                     )
+            )
+        )
+
+    return html.div(
+        html.h2({"class": "titulo-pantalla"}, "PEDIDOS ENTRANTES"),
+        html.div({"class": "pedidos-container"},
+                 [render_pedidosEntrantes_item(pedido_item) for pedido_item in pedidos])
+    )
+
+
+
+    
+    
+    """
     def render_pedidosEntrantes_item(pedido_item):
         return html.div(
             {
@@ -29,7 +79,6 @@ def PedidosEntrantesContent():
                 html.div({"class": "card-title"},
                          f"Producto: {pedido_item['producto_id']}"),
                 html.p(f"Cantidad: {pedido_item['cantidad']}"),
-
             )
         )
 
@@ -69,4 +118,4 @@ def PedidosEntrantesContent():
     return html.div(
         html.h2({"class": "titulo-pantalla"}, "PEDIDOS ENTRANTES"),
         html.div({"class": "pedidos-container"}, cards)
-    )
+    )"""
