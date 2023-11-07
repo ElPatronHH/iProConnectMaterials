@@ -41,6 +41,16 @@ async def borrar_producto(stock_id: int, db: db_dependency):
     db.commit()
     return None  
 
+#Para pedidos rechazados de una
+@router.put("/backend/pedidos/{pedido_id}/cambiar-status", status_code=status.HTTP_200_OK)
+async def cambiar_status_pedido(pedido_id: int, new_status: str, db: db_dependency):
+    pedido = db.query(models.Pedidos).filter(models.Pedidos.id == pedido_id).first()
+    if pedido is None:
+        raise HTTPException(status_code=404, detail='Pedido not Found')
+    pedido.status = new_status
+    db.commit()
+    return {"message": f"Status del pedido {pedido_id} actualizado a {new_status}"}
+
 # Lee la tabla de productos, pai
 @router.get("/backend/stockfull", status_code=status.HTTP_200_OK)
 async def read_fullStock(db: db_dependency):
@@ -117,6 +127,31 @@ async def read_pedidosEntrantes(db: db_dependency):
         })
     return pedidos_entrantes
 
+# Retorna todos el historial de pedidos (RECHAZADOS Y FINALIZADOS) junto con su detalle
+@router.get("/backend/historialDePedidos", status_code=status.HTTP_200_OK)
+async def read_pedidosEntrantes(db: db_dependency):
+    from sqlalchemy.orm import aliased
+    from sqlalchemy import select, join
+
+    Pedido = aliased(models.Pedidos)
+    DetallePedido = aliased(models.Detalle_P)
+    Producto = aliased(models.Productos)
+    query = (
+        select(Pedido, DetallePedido, Producto)
+        .join(DetallePedido, Pedido.id == DetallePedido.id_pedido)
+        .join(Producto, DetallePedido.id_producto == Producto.id)
+        .where(Pedido.status == 'HISTORIAL')
+    )
+    result = db.execute(query).all()
+    pedidos_entrantes = []
+    for row in result:
+        pedido, detalle_pedido, producto = row
+        pedidos_entrantes.append({
+            "pedido": pedido,
+            "detalle_pedido": detalle_pedido,
+            "producto": producto,
+        })
+    return pedidos_entrantes
 
 #insert en la tabla de productos
 @router.post("/backend/addproduct", status_code=status.HTTP_201_CREATED)

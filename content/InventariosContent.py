@@ -14,11 +14,11 @@ def InventariosContent():
     async def handle_delete(producto):
         await deleteProducto(producto)
         await fillItems()
-
     def delete_button_click_handler(e, producto_id):
         async def async_handler():
             await handle_delete(producto_id)
         asyncio.ensure_future(async_handler())
+        
     use_effect(fillItems)
 
     def render_stock_item(stock_item):

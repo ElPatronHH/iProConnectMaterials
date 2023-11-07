@@ -16,6 +16,14 @@ async def getPedidosEntrantes():
         result = response.json()
         return result
     
+async def getHistorialDePedidos():
+    async with httpx.AsyncClient() as client:
+        response = await client.get("http://localhost:8000/backend/historialDePedidos")
+
+    if response.status_code == 200:
+        result = response.json()
+        return result
+    
 async def deleteProducto(stock_id):
     async with httpx.AsyncClient() as client:
         response = await client.delete(f"http://localhost:8000/stock/{stock_id}")
@@ -23,9 +31,16 @@ async def deleteProducto(stock_id):
         return True  
     else:
         return False  
-    
 
-import httpx
+async def rechazarPedido(pedido_id):
+    url = f"http://localhost:8000/backend/pedidos/{pedido_id}/cambiar-status?new_status=HISTORIAL" 
+    data = {"status": "HISTORIAL"}
+    async with httpx.AsyncClient() as client:
+        response = await client.put(url, json=data)
+    if response.status_code == 200:
+        return True
+    else:
+        return False
 
 async def addProducto(producto_data):
     url = "http://localhost:8000/backend/addproduct" 

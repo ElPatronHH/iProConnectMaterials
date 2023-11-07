@@ -1,14 +1,14 @@
 from reactpy import html, component, use_state, use_effect
-from database.api import getPedidosEntrantes, rechazarPedido
+from database.api import getHistorialDePedidos, rechazarPedido
 import asyncio
 
 
 @component
-def PedidosEntrantesContent():
+def HistorialPedidosContent():
     pedidos, set_pedidos = use_state([])
 
     async def fillPedidos():
-        pedidos_data = await getPedidosEntrantes()
+        pedidos_data = await getHistorialDePedidos()
         set_pedidos(pedidos_data)
 
     async def handle_rechazar(pedido):
@@ -49,23 +49,12 @@ def PedidosEntrantesContent():
         cards.append(html.div({"class": "grupo-tarjeta"},
                               html.h5({"class": "card-title"},
                                       f"Pedido {pedido_id}",
-                                      html.div({"class": "botonera-card"},
-                                               html.button({"class": "btn btn-primary",
-                                                            # "onclick": lambda event: delete_product(stock_item["id"])
-                                                            },
-                                                           "Aceptar"
-                                                           ),
-                                               html.button({"class": "btn btn-danger",
-                                                            "onclick": lambda e, pedido_id=pedido_id: rechazar_button_click_handler(e, pedido_id)
-                                                            },
-                                                           "Rechazar"
-                                                           )
-                                               )),
+                                      ),
                               [render_detalle_pedido(pedido_item)
                                for pedido_item in grupo_pedidos]
                               )
                      )
     return html.div(
-        html.h2({"class": "titulo-pantalla"}, "PEDIDOS ENTRANTES"),
+        html.h2({"class": "titulo-pantalla"}, "HISTORIAL DE PEDIDOS"),
         html.div({"class": "pedidos-container"}, cards)
     )

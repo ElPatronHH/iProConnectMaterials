@@ -94,16 +94,14 @@ INSERT INTO compras (id_producto, cantidad, fecha, precio_total) VALUES
 --EJEMPLO DE SOLICITUD POST PARA PEDIDO
 [
   {
-    "pedido_id":1, --Aquí para aclarar que todo es parte del mismo pedido.
-    "id":1, --Este, ¿Cómo ves?, creo que puede ser un auto increment en nuestro sistema, entonces quizá no lo tengas que proporcionar.
     "productos":[
       {
         "id":1, --Te voy a pasar los id de nuestro "catálogo"
-        "cantidad":"200" --Cuántos de ese material
+        "cantidad":"2" --Cuántos de ese material
       },
       {
         "id":2, --Te voy a pasar los id de nuestro "catálogo"
-        "cantidad":"300" --Cuántos de ese material
+        "cantidad":"3" --Cuántos de ese material
       }
     ],
     "fecha_pedido":"2023-01-10", -- Esta que sea la fecha del día que se manda, la recuperas en tu código plx
@@ -114,15 +112,14 @@ INSERT INTO compras (id_producto, cantidad, fecha, precio_total) VALUES
 
 [
   {
-    "id":"1", 
     "productos":[
       {
         "id":1, 
-        "cantidad":"200" 
+        "cantidad":"2" 
       },
       {
         "id":2, 
-        "cantidad":"300" 
+        "cantidad":"3" 
       }
     ],
     "fecha_pedido":"2023-01-10",
