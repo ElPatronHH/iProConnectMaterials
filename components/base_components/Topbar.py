@@ -17,7 +17,7 @@ Topbar = (
                        "Historial de Pedidos")),
             html.li(
                 html.a({"href": "/inventarios"},
-                       "Inventarios")),
+                       "Inventario")),
             html.li(
                 html.a({"href": "/ajustes"},
                        "Ajustes")),

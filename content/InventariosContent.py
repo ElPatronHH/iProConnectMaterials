@@ -1,6 +1,6 @@
 from reactpy import html, component, use_state, use_effect
-from database.api import getStock
-
+from database.api import getStock, deleteProducto
+import asyncio
 
 @component
 def InventariosContent():
@@ -10,6 +10,15 @@ def InventariosContent():
         stock_data = await getStock()
         set_stock(stock_data)
 
+    async def handle_delete(producto):
+        await deleteProducto(producto)
+        await fillItems()
+    
+    def delete_button_click_handler(e, producto_id):
+        async def async_handler():
+            await handle_delete(producto_id)
+        asyncio.ensure_future(async_handler())
+    
     use_effect(fillItems)
 
     def render_stock_item(stock_item):
@@ -20,17 +29,21 @@ def InventariosContent():
             },
             html.p({"class": "card-title"}, stock_item["nombre"]),
             html.p({"class": "centered-p"}, f"{stock_item['descripcion']}"),
-            html.p(f"ID {stock_item['id']}"),
+            html.p(f"ID: {stock_item['id']}"),
+             html.p(f"Medida: {stock_item['medida']}"),
             html.p(f"Precio de compra: {stock_item['precio_compra']}"),
             html.p(f"Precio de venta: {stock_item['precio_venta']}"),
+             html.p(f"Cantidad Máxima: {stock_item['cantidad_max']}"),
+              html.p(f"Cantidad Mínima: {stock_item['cantidad_min']}"),
+               html.p(f"Status: {stock_item['status']}"),
             html.div({"class": "botonera-card"},
-                     html.button({"class": "btn btn-primary",
-                                  # "onclick": lambda event: accept_pedido(pedido_item)
+                     html.button({"class": "btn",
+                                   #"onclick": lambda event: delete_product(stock_item["id"])
                                   },
                                  "Modificar"
                                  ),
                      html.button({"class": "btn btn-danger",
-                                  # "onclick": lambda event: reject_pedido(pedido_item)
+                                  "onclick": lambda e: delete_button_click_handler(e, stock_item["id"])
                                   },
                                  "Eliminar"
                                  )
@@ -50,5 +63,5 @@ def InventariosContent():
                                  "Añadir Producto"
                                  )
         ),
-                 [render_stock_item(stock_item) for stock_item in stock]),
-        )
+            [render_stock_item(stock_item) for stock_item in stock]),
+    )

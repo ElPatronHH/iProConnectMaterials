@@ -28,6 +28,20 @@ async def read_uniqueStock(stock_id: int, db: db_dependency):
         raise HTTPException(status_code=404, detail='Stock not Found')
     return stock
 
+#delete de un producto
+@router.delete("/stock/{stock_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def borrar_producto(stock_id: int, db: db_dependency):
+    stock = db.query(models.Productos).filter(
+        models.Productos.id == stock_id).first()
+    
+    if stock is None:
+        raise HTTPException(status_code=404, detail='Stock not Found')
+
+    db.delete(stock)
+    db.commit()
+
+    return None  
+
 # Lee la tabla de productos, pai
 @router.get("/backend/stockfull", status_code=status.HTTP_200_OK)
 async def read_fullStock(db: db_dependency):
