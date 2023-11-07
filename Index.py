@@ -9,7 +9,7 @@ from reactpy_router import route, simple
 from screens.App import App
 from screens.HistorialPedidos import HistorialPedidos
 from screens.Inventarios import Inventarios
-from screens.Ajustes import Ajustes
+from screens.Compras import Compras
 from screens.PedidosEntrantes import PedidosEntrantes
 from screens.PedidosEnCurso import PedidosEnCurso
 
@@ -28,7 +28,7 @@ def Index():
         route("/pedidosencurso", PedidosEnCurso(context)),
         route("/historialpedidos", HistorialPedidos(context)),
         route("/inventarios",Inventarios(context)),  
-        route("/ajustes", Ajustes(context))
+        route("/compras", Compras(context))
     )
 
 app.include_router(router_api)

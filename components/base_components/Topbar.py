@@ -4,7 +4,7 @@ Topbar = (
     html.header(
         html.ul(
             html.li(
-                html.a({"href": "/"},
+                html.h2(
                        "iProConnectMaterials")),
             html.li(
                 html.a({"href": "/pedidosentrantes"},
@@ -19,8 +19,8 @@ Topbar = (
                 html.a({"href": "/inventarios"},
                        "Inventario")),
             html.li(
-                html.a({"href": "/ajustes"},
-                       "Ajustes")),
+                html.a({"href": "/compras"},
+                       "Compras")),
         )
     )
 )

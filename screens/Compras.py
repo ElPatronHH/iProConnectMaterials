@@ -2,11 +2,10 @@ from reactpy import component
 from reactpy.core.hooks import use_context
 from components.Base import Base
 
-from content.Main import Main
-
+from content.ComprasContent import ComprasContent
 
 @component
-def Ajustes(context):
+def Compras(context):
     context_value = use_context(context)
 
-    return Base((Main), context_value)
+    return Base((ComprasContent()), context_value)
