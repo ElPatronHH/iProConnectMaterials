@@ -6,6 +6,7 @@ import asyncio
 @component
 def PedidosEntrantesContent():
     pedidos, set_pedidos = use_state([])
+    motivo, set_motivo = use_state("")
 
     async def fillPedidos():
         pedidos_data = await getPedidosEntrantes()
@@ -61,6 +62,14 @@ def PedidosEntrantesContent():
                                                            "Rechazar"
                                                            )
                                                )),
+                              html.div({"class": "input-centrado"},
+                                       html.input(
+                                  {
+                                      "type": "text",
+                                      "placeholder": "Motivo en caso de rechazo...",
+                                      "value": motivo
+                                  }
+                              )),
                               [render_detalle_pedido(pedido_item)
                                for pedido_item in grupo_pedidos]
                               )

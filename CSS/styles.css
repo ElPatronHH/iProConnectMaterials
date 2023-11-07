@@ -92,7 +92,19 @@ body{
 .card:hover {
   transform: scale(1.05);
 }
+.input-centrado {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
+.input-centrado input {
+  width: 100%;
+  height: 100%;
+  resize: none;
+}
 .centered-p {
   text-align: center;
 }
