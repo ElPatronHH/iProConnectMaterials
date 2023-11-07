@@ -39,7 +39,7 @@ async def borrar_producto(stock_id: int, db: db_dependency):
     db.commit()
     return None  
 
-#Para pedidos rechazados de una
+#Para pedidos rechazados de una (cambia el status a HISTORIAL)
 @router.put("/backend/pedidos/{pedido_id}/cambiar-status", status_code=status.HTTP_200_OK)
 async def cambiar_status_pedido(pedido_id: int, new_status: str, db: db_dependency):
     pedido = db.query(models.Pedidos).filter(models.Pedidos.id == pedido_id).first()
@@ -49,10 +49,20 @@ async def cambiar_status_pedido(pedido_id: int, new_status: str, db: db_dependen
     db.commit()
     return {"message": f"Status del pedido {pedido_id} actualizado a {new_status}"}
 
+#Para borrado lógico de productos
+@router.put("/backend/productos/{producto_id}/cambiar-status", status_code=status.HTTP_200_OK)
+async def cambiar_status_pedido(producto_id: int, new_status: int, db: db_dependency):
+    producto = db.query(models.Productos).filter(models.Productos.id == producto_id).first()
+    if producto is None:
+        raise HTTPException(status_code=404, detail='Pedido not Found')
+    producto.status = new_status
+    db.commit()
+    return {"message": f"Status del producto {producto_id} actualizado a {new_status}"}
+
 # Lee la tabla de productos, pai
 @router.get("/backend/stockfull", status_code=status.HTTP_200_OK)
 async def read_fullStock(db: db_dependency):
-    stocks = db.query(models.Productos).all()
+    stocks = db.query(models.Productos).filter(models.Productos.status == 1).all()
     return stocks
 
 # Este postea un pedido entrante con el formato JSON, las fechas y el id son el mismo, pero inserta múltiples registros por producto
@@ -99,7 +109,7 @@ async def read_pedidosEntrantes(db: db_dependency):
     pedidos = db.query(models.Pedidos).all()
     return pedidos
 
-# Retorna todos los pedidos entrantes junto con su detalle
+# Retorna todos los pedidos ENTRANTES junto con su detalle
 @router.get("/backend/pedidosEntrantes", status_code=status.HTTP_200_OK)
 async def read_pedidosEntrantes(db: db_dependency):
     from sqlalchemy.orm import aliased

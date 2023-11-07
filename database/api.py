@@ -31,6 +31,14 @@ async def deleteProducto(stock_id):
         return True  
     else:
         return False  
+    
+async def deleteProductoLogico(producto_id):
+    async with httpx.AsyncClient() as client:
+        response = await client.put(f"http://localhost:8000/backend/productos/{producto_id}/cambiar-status?new_status=0")
+    if response.status_code == 200:
+        return True  
+    else:
+        return False 
 
 async def rechazarPedido(pedido_id):
     url = f"http://localhost:8000/backend/pedidos/{pedido_id}/cambiar-status?new_status=HISTORIAL" 

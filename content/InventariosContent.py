@@ -1,7 +1,6 @@
 from reactpy import html, component, use_state, use_effect
-from database.api import getStock, deleteProducto
+from database.api import getStock, deleteProductoLogico
 import asyncio
-
 
 @component
 def InventariosContent():
@@ -12,7 +11,7 @@ def InventariosContent():
         set_stock(stock_data)
 
     async def handle_delete(producto):
-        await deleteProducto(producto)
+        await deleteProductoLogico(producto)
         await fillItems()
     def delete_button_click_handler(e, producto_id):
         async def async_handler():
