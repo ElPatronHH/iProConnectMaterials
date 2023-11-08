@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends, status, Request
 from typing import Annotated
+from pydantic import BaseModel
 import models
 from database.database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import aliased
-from sqlalchemy import select
+from sqlalchemy import select, join
 
 router = APIRouter()
 
@@ -27,6 +28,28 @@ async def read_uniqueStock(stock_id: int, db: db_dependency):
     if stock is None:
         raise HTTPException(status_code=404, detail='Stock not Found')
     return stock
+
+# Actualiza varios campos de un productou
+class UpdateProductoModel(BaseModel):
+    precio_compra: int
+    precio_venta: int
+    cantidad_max: int
+    cantidad_min: int
+    venta_max: int
+    venta_min: int
+@router.put("/backend/productos/{producto_id}", status_code=status.HTTP_200_OK)
+async def actualizar_producto(producto_id: int, update_data: UpdateProductoModel, db: db_dependency):
+    producto = db.query(models.Productos).filter(models.Productos.id == producto_id).first()
+    if producto is None:
+        raise HTTPException(status_code=404, detail='Producto not Found')
+    producto.precio_compra = update_data.precio_compra
+    producto.precio_venta = update_data.precio_venta
+    producto.cantidad_max = update_data.cantidad_max
+    producto.cantidad_min = update_data.cantidad_min
+    producto.venta_max = update_data.venta_max
+    producto.venta_min = update_data.venta_min
+    db.commit()
+    return {"message": f"Producto {producto_id} actualizado con éxito"}
 
 #delete de un producto
 @router.delete("/stock/{stock_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -112,9 +135,6 @@ async def read_pedidosEntrantes(db: db_dependency):
 # Retorna todos los pedidos ENTRANTES junto con su detalle
 @router.get("/backend/pedidosEntrantes", status_code=status.HTTP_200_OK)
 async def read_pedidosEntrantes(db: db_dependency):
-    from sqlalchemy.orm import aliased
-    from sqlalchemy import select, join
-
     Pedido = aliased(models.Pedidos)
     DetallePedido = aliased(models.Detalle_P)
     Producto = aliased(models.Productos)
@@ -138,9 +158,6 @@ async def read_pedidosEntrantes(db: db_dependency):
 # Retorna todos el historial de pedidos (RECHAZADOS Y FINALIZADOS) junto con su detalle
 @router.get("/backend/historialDePedidos", status_code=status.HTTP_200_OK)
 async def read_pedidosEntrantes(db: db_dependency):
-    from sqlalchemy.orm import aliased
-    from sqlalchemy import select, join
-
     Pedido = aliased(models.Pedidos)
     DetallePedido = aliased(models.Detalle_P)
     Producto = aliased(models.Productos)
@@ -149,6 +166,29 @@ async def read_pedidosEntrantes(db: db_dependency):
         .join(DetallePedido, Pedido.id == DetallePedido.id_pedido)
         .join(Producto, DetallePedido.id_producto == Producto.id)
         .where(Pedido.status == 'HISTORIAL')
+    )
+    result = db.execute(query).all()
+    pedidos_entrantes = []
+    for row in result:
+        pedido, detalle_pedido, producto = row
+        pedidos_entrantes.append({
+            "pedido": pedido,
+            "detalle_pedido": detalle_pedido,
+            "producto": producto,
+        })
+    return pedidos_entrantes
+
+# Retorna todoss los pedidos que están en curso
+@router.get("/backend/pedidosEnCurso", status_code=status.HTTP_200_OK)
+async def read_pedidosEntrantes(db: db_dependency):
+    Pedido = aliased(models.Pedidos)
+    DetallePedido = aliased(models.Detalle_P)
+    Producto = aliased(models.Productos)
+    query = (
+        select(Pedido, DetallePedido, Producto)
+        .join(DetallePedido, Pedido.id == DetallePedido.id_pedido)
+        .join(Producto, DetallePedido.id_producto == Producto.id)
+        .where(Pedido.status == 'EN CURSO')
     )
     result = db.execute(query).all()
     pedidos_entrantes = []

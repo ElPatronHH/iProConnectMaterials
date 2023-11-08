@@ -1,23 +1,30 @@
 header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  z-index: 100;
+  width: 99%;
   background-color: rgb(42, 54, 189);
   color: #ffffff;
-  text-align: center;
-  font-size: 1.5rem;
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
   border: 1px solid gray;
   text-transform: uppercase;
+  border-radius: 8px;
 }
 
-ul {
-  list-style: none;
-  padding: 0; 
-  display: flex; 
+.topbar{
+  border-radius: 8px;
+  display: flex;
 }
 
-li {
-  margin-right: 20px;
+.topbar a{
+  border-radius: 8px;
+  display: block;
+  padding: 20px;
+}
+
+.topbar a:hover{
+  background: darkblue;
 }
 
 a {
@@ -27,6 +34,7 @@ a {
 }
 
 h2{
+  border-radius: 8px;
   font-family: sans-serif;
   text-align: center;
 }
@@ -44,6 +52,7 @@ body{
 }
 
 .pedidos-container {
+  margin-top: 50px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

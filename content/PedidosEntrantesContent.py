@@ -49,7 +49,9 @@ def PedidosEntrantesContent():
     for pedido_id, grupo_pedidos in grouped_pedidos.items():
         cards.append(html.div({"class": "grupo-tarjeta"},
                               html.h5({"class": "card-title"},
-                                      f"Pedido {pedido_id}",
+                                      f"PEDIDO {pedido_id}",
+                html.p(
+                    f"Fecha: {pedido_item['pedido']['fecha_entrega']}"),
                                       html.div({"class": "botonera-card"},
                                                html.button({"class": "btn btn-primary",
                                                             # "onclick": lambda event: delete_product(stock_item["id"])

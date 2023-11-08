@@ -49,9 +49,11 @@ def HistorialPedidosContent():
         motivo = pedido_data["pedido_item"].get("pedido", {}).get("motivo", "Motivo no especificado")
         cards.append(html.div({"class": "grupo-tarjeta"},
                     html.h5({"class": "card-title"},
-                            f"Pedido {pedido_id} RECHAZADO" if motivo else f"Pedido {pedido_id}",
-                            ),
-                    html.p({"class": "centered-p"}, motivo) if motivo else "",
+                            f"PEDIDO {pedido_id} RECHAZADO" if motivo else f"PEDIDO {pedido_id}",
+                            
+                html.p(
+                    f"Fecha: {pedido_item['pedido']['fecha_entrega']}")),
+                    html.p({"class": "centered-p"}, "Motivo: ",motivo) if motivo else "",
                     [render_detalle_pedido(pedido_item)
                     for pedido_item in pedido_data["productos"]]
                     )

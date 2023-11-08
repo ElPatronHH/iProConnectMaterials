@@ -6,7 +6,6 @@ from reactpy.core.hooks import create_context
 from reactpy_router import route, simple
 
 # Content
-from screens.App import App
 from screens.HistorialPedidos import HistorialPedidos
 from screens.Inventarios import Inventarios
 from screens.Compras import Compras
@@ -23,7 +22,6 @@ def Index():
     context = create_context("value")
 
     return simple.router(
-        route("/", App(context)),
         route("/pedidosentrantes", PedidosEntrantes(context)),
         route("/pedidosencurso", PedidosEnCurso(context)),
         route("/historialpedidos", HistorialPedidos(context)),
