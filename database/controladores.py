@@ -31,6 +31,9 @@ async def read_uniqueStock(stock_id: int, db: db_dependency):
 
 # Actualiza varios campos de un productou
 class UpdateProductoModel(BaseModel):
+    nombre:str
+    descripcion:str
+    medida:str
     precio_compra: int
     precio_venta: int
     cantidad_max: int
@@ -206,19 +209,26 @@ async def read_pedidosEntrantes(db: db_dependency):
 async def add_product(request: Request, db: db_dependency):
     try:
         data = await request.json()
-        nuevo_producto = models.Productos(
-            nombre=data["nombre"],
-            descripcion=data["descripcion"],
-            medida=data["medida"],
-            precio_compra=data["precio_compra"],
-            precio_venta=data["precio_venta"],
-            cantidad_max=data["cantidad_max"],
-            cantidad_min=data["cantidad_min"],
-            status=data["status"]
-        )
-        db.add(nuevo_producto)
-        db.commit()
-        return nuevo_producto
+        if isinstance(data, list) and len(data) > 0:
+            product_data = data[0]  
+            nuevo_producto = models.Productos(
+                nombre=product_data["nombre"],
+                descripcion=product_data["descripcion"],
+                medida=product_data["medida"],
+                stock=product_data["stock"],
+                precio_compra=product_data["precio_compra"],
+                precio_venta=product_data["precio_venta"],
+                cantidad_max=product_data["cantidad_max"],
+                cantidad_min=product_data["cantidad_min"],
+                venta_max=product_data["venta_max"],
+                venta_min=product_data["venta_min"],
+                status=product_data["status"]
+            )
+            db.add(nuevo_producto)
+            db.commit()
+            return nuevo_producto
+        else:
+            raise HTTPException(status_code=400, detail="Invalid JSON format")
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))

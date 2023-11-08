@@ -79,6 +79,7 @@ body{
   transition: transform 0.2s;
   background-color: #fff;
   justify-content: center;
+  padding: 10px;
 }
 
 .botonera-card {
