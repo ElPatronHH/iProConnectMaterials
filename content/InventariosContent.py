@@ -39,6 +39,28 @@ def InventariosContent():
             await handle_delete(producto_id)
         asyncio.ensure_future(async_handler())
 
+    async def handle_add(json):
+        await addProducto(json)
+        await fillItems()
+    def add_button_click_handler(nombreN,descripcionN,medidaN,stockN,precio_compraN,precio_ventaN,cantidad_maxN,cantidad_minN,venta_maxN,venta_minN):
+        json =  [{
+            "nombre": nombreN,
+            "descripcion":descripcionN,
+            "medida": medidaN,
+            "stock":stockN,
+            "precio_compra":precio_compraN,
+            "precio_venta":precio_ventaN,
+            "cantidad_max":cantidad_maxN,
+            "cantidad_min":cantidad_minN,
+            "venta_max":venta_maxN,
+            "venta_min":venta_minN,
+            "status":1
+        }]
+        print(json)
+        async def async_handler():
+            await handle_add(json)
+        asyncio.ensure_future(async_handler())
+
     async def handle_modify(producto):
         # Llama a la función modifyProducto para enviar los datos modificados al servidor
         new_data = {
@@ -200,7 +222,7 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "T3_B_0LIT8",
-                           "onChange": lambda e: set_precio_compra(e["target"]["value"])
+                           "onChange": lambda e: set_nombreN(e["target"]["value"])
                        }
                    )),
             html.p(f"Descripción: ",
@@ -208,14 +230,14 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "Litio",
-                           "onChange": lambda e: set_precio_compra(e["target"]["value"])
+                           "onChange": lambda e: set_descripcionN(e["target"]["value"])
                        }
                    )),
             html.p(f"Medida: ",
                    html.select(
                        {
                            "type": "text",
-                           "onChange": lambda e: set_precio_compra(e["target"]["value"])
+                           "onChange": lambda e: set_medidaN(e["target"]["value"])
                        }, html.option(
                            {
                                "value": "Kilogramo"
@@ -233,7 +255,7 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "2000",
-                           "onChange": lambda e: set_precio_compra(e["target"]["value"])
+                           "onChange": lambda e: set_stockN(e["target"]["value"])
                        }
                    )),
             html.p("Precio de compra: ",
@@ -241,7 +263,7 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "20",
-                           "onChange": lambda e: set_precio_compra(e["target"]["value"])
+                           "onChange": lambda e: set_precio_compraN(e["target"]["value"])
                        }
                    )
                    ),
@@ -250,7 +272,7 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "30",
-                           "onChange": lambda e: set_precio_venta(e["target"]["value"])
+                           "onChange": lambda e: set_precio_ventaN(e["target"]["value"])
                        }
                    )
                    ),
@@ -259,7 +281,7 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "20000",
-                           "onChange": lambda e: set_cantidad_max(e["target"]["value"])
+                           "onChange": lambda e: set_cantidad_maxN(e["target"]["value"])
                        }
                    )
                    ),
@@ -268,7 +290,7 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "1000",
-                           "onChange": lambda e: set_cantidad_min(e["target"]["value"])
+                           "onChange": lambda e: set_cantidad_minN(e["target"]["value"])
                        }
                    )
                    ),
@@ -277,7 +299,7 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "500",
-                           "onChange": lambda e: set_venta_max(e["target"]["value"])
+                           "onChange": lambda e: set_venta_maxN(e["target"]["value"])
                        }
                    )
                    ),
@@ -286,12 +308,12 @@ def InventariosContent():
                        {
                            "type": "text",
                            "placeholder":  "200",
-                           "onChange": lambda e: set_venta_min(e["target"]["value"])
+                           "onChange": lambda e: set_venta_minN(e["target"]["value"])
                        }
                    )
                    ),
                      html.button({"class": "btn btn-primary",
-                                  # "onclick": lambda event: accept_pedido(pedido_item)
+                                  "onclick": lambda event: add_button_click_handler(nombreN,descripcionN,medidaN,stockN,precio_compraN,precio_ventaN,cantidad_maxN,cantidad_minN,venta_maxN,venta_minN)
                                   },
                                  "Añadir Producto"
                                  )

@@ -67,6 +67,5 @@ async def addProducto(producto_data):
     url = "http://localhost:8000/backend/addproduct" 
     async with httpx.AsyncClient() as client:
         response = await client.post(url, json=producto_data)
-
     if response.status_code == 201:
         return response.json()
