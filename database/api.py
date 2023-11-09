@@ -53,19 +53,18 @@ async def modifyProducto(producto_id, update_data):
     else:
         return False
 
-async def rechazarPedido(pedido_id):
-    url = f"http://localhost:8000/backend/pedidos/{pedido_id}/cambiar-status?new_status=HISTORIAL" 
-    data = {"status": "HISTORIAL"}
-    async with httpx.AsyncClient() as client:
-        response = await client.put(url, json=data)
-    if response.status_code == 200:
-        return True
-    else:
-        return False
-
 async def addProducto(producto_data):
     url = "http://localhost:8000/backend/addproduct" 
     async with httpx.AsyncClient() as client:
         response = await client.post(url, json=producto_data)
     if response.status_code == 201:
         return response.json()
+    
+async def rechazarPedido(pedido_id,update_data):
+    url = f"http://localhost:8000/backend/pedidos/{pedido_id}" 
+    async with httpx.AsyncClient() as client:
+        response = await client.put(url, json=update_data)
+    if response.status_code == 200:
+        return True
+    else:
+        return False

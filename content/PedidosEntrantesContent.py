@@ -12,13 +12,17 @@ def PedidosEntrantesContent():
         pedidos_data = await getPedidosEntrantes()
         set_pedidos(pedidos_data)
 
-    async def handle_rechazar(pedido):
-        await rechazarPedido(pedido)
+    async def handle_rechazar(pedido,motivo):
+        json = {
+            "motivo":motivo,
+            "status":"HISTORIAL"
+        }
+        print(json)
+        await rechazarPedido(pedido,json)
         await fillPedidos()
-
-    def rechazar_button_click_handler(e, pedido_id):
+    def rechazar_button_click_handler(e, pedido_id, motivo):
         async def async_handler():
-            await handle_rechazar(pedido_id)
+            await handle_rechazar(pedido_id,motivo)
         asyncio.ensure_future(async_handler())
 
     use_effect(fillPedidos)
@@ -59,7 +63,7 @@ def PedidosEntrantesContent():
                                                            "Aceptar"
                                                            ),
                                                html.button({"class": "btn btn-danger",
-                                                            "onclick": lambda e, pedido_id=pedido_id: rechazar_button_click_handler(e, pedido_id)
+                                                            "onclick": lambda e, pedido_id=pedido_id: rechazar_button_click_handler(e, pedido_id,motivo)
                                                             },
                                                            "Rechazar"
                                                            )
@@ -69,7 +73,7 @@ def PedidosEntrantesContent():
                                   {
                                       "type": "text",
                                       "placeholder": "Motivo en caso de rechazo...",
-                                      "value": motivo
+                                      "onChange": lambda e: set_motivo(e["target"]["value"])
                                   }
                               )),
                               [render_detalle_pedido(pedido_item)

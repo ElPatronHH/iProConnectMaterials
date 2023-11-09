@@ -6,9 +6,7 @@ from database.database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import aliased
 from sqlalchemy import select, join
-
 router = APIRouter()
-
 models.DataBase.metadata.create_all(bind=engine)
 
 def get_db():
@@ -17,23 +15,22 @@ def get_db():
         yield db
     finally:
         db.close()
-
 db_dependency = Annotated[Session, Depends(get_db)]
 
-# Éstas son algo así como las consultas a la base de datos, que se alojan en la ruta que marca, no son métodos que se llamen tal cual
+# Éstas son algo así como las consultas a la base de datos, que se alojan en la ruta que marca, no son métodos que se llamen tal cual, aquí el primero es para obtener data de un solo producto, no sirve pa nada pq no lo usamos, pero parar probar
 @router.get("/stock/{stock_id}", status_code=status.HTTP_200_OK)
-async def read_uniqueStock(stock_id: int, db: db_dependency):
+async def read_unique_stock(stock_id: int, db: db_dependency):
     stock = db.query(models.Productos).filter(
         models.Productos.id == stock_id).first()
     if stock is None:
         raise HTTPException(status_code=404, detail='Stock not Found')
     return stock
 
-# Actualiza varios campos de un productou
+# Actualiza varios campos de un productou, ocupamos model
 class UpdateProductoModel(BaseModel):
-    nombre:str
-    descripcion:str
-    medida:str
+    nombre: str
+    descripcion: str
+    medida: str
     precio_compra: int
     precio_venta: int
     cantidad_max: int
@@ -41,8 +38,9 @@ class UpdateProductoModel(BaseModel):
     venta_max: int
     venta_min: int
 @router.put("/backend/productos/{producto_id}", status_code=status.HTTP_200_OK)
-async def actualizar_producto(producto_id: int, update_data: UpdateProductoModel, db: db_dependency):
-    producto = db.query(models.Productos).filter(models.Productos.id == producto_id).first()
+async def update_product(producto_id: int, update_data: UpdateProductoModel, db: db_dependency):
+    producto = db.query(models.Productos).filter(
+        models.Productos.id == producto_id).first()
     if producto is None:
         raise HTTPException(status_code=404, detail='Producto not Found')
     producto.precio_compra = update_data.precio_compra
@@ -54,49 +52,41 @@ async def actualizar_producto(producto_id: int, update_data: UpdateProductoModel
     db.commit()
     return {"message": f"Producto {producto_id} actualizado con éxito"}
 
-#delete de un producto
+# Delete real de un producto
 @router.delete("/stock/{stock_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def borrar_producto(stock_id: int, db: db_dependency):
+async def borrar_permanentemente_product(stock_id: int, db: db_dependency):
     stock = db.query(models.Productos).filter(
         models.Productos.id == stock_id).first()
     if stock is None:
         raise HTTPException(status_code=404, detail='Stock not Found')
     db.delete(stock)
     db.commit()
-    return None  
+    return None
 
-#Para pedidos rechazados de una (cambia el status a HISTORIAL)
-@router.put("/backend/pedidos/{pedido_id}/cambiar-status", status_code=status.HTTP_200_OK)
-async def cambiar_status_pedido(pedido_id: int, new_status: str, db: db_dependency):
-    pedido = db.query(models.Pedidos).filter(models.Pedidos.id == pedido_id).first()
-    if pedido is None:
-        raise HTTPException(status_code=404, detail='Pedido not Found')
-    pedido.status = new_status
-    db.commit()
-    return {"message": f"Status del pedido {pedido_id} actualizado a {new_status}"}
-
-#Para borrado lógico de productos
+# Para borrado lógico de productos
 @router.put("/backend/productos/{producto_id}/cambiar-status", status_code=status.HTTP_200_OK)
-async def cambiar_status_pedido(producto_id: int, new_status: int, db: db_dependency):
-    producto = db.query(models.Productos).filter(models.Productos.id == producto_id).first()
+async def borrar_logicamente_product(producto_id: int, new_status: int, db: db_dependency):
+    producto = db.query(models.Productos).filter(
+        models.Productos.id == producto_id).first()
     if producto is None:
         raise HTTPException(status_code=404, detail='Pedido not Found')
     producto.status = new_status
     db.commit()
     return {"message": f"Status del producto {producto_id} actualizado a {new_status}"}
 
-# Lee la tabla de productos, pai
+# Lee la tabla de productos con un 1 en statur, pai
 @router.get("/backend/stockfull", status_code=status.HTTP_200_OK)
-async def read_fullStock(db: db_dependency):
-    stocks = db.query(models.Productos).filter(models.Productos.status == 1).all()
+async def read_full_stock(db: db_dependency):
+    stocks = db.query(models.Productos).filter(
+        models.Productos.status == 1).all()
     return stocks
 
 # Este postea un pedido entrante con el formato JSON, las fechas y el id son el mismo, pero inserta múltiples registros por producto
 @router.post("/backend/postPedidoEntrante", status_code=status.HTTP_201_CREATED)
-async def create_pedido_entrante(request: Request, db: db_dependency):
+async def add_pedido_entrante(request: Request, db: db_dependency):
     try:
         data = await request.json()
-        total_pedido = 0  
+        total_pedido = 0
         nuevo_pedido = models.Pedidos(
             fecha_pedido=data[0].get("fecha_pedido"),
             fecha_entrega=data[0].get("fecha_entrega"),
@@ -109,7 +99,8 @@ async def create_pedido_entrante(request: Request, db: db_dependency):
         for producto_data in data[0]["productos"]:
             producto_id = producto_data["id"]
             cantidad = int(producto_data["cantidad"])
-            producto = db.query(models.Productos).filter(models.Productos.id == producto_id).first()
+            producto = db.query(models.Productos).filter(
+                models.Productos.id == producto_id).first()
             if producto:
                 precio = producto.precio_venta
                 total_producto = precio * cantidad
@@ -131,13 +122,13 @@ async def create_pedido_entrante(request: Request, db: db_dependency):
 
 # Este retorna todos los pedidos
 @router.get("/backend/pedidos", status_code=status.HTTP_200_OK)
-async def read_pedidosEntrantes(db: db_dependency):
+async def read_todos_pedidos(db: db_dependency):
     pedidos = db.query(models.Pedidos).all()
     return pedidos
 
 # Retorna todos los pedidos ENTRANTES junto con su detalle
 @router.get("/backend/pedidosEntrantes", status_code=status.HTTP_200_OK)
-async def read_pedidosEntrantes(db: db_dependency):
+async def read_pedidos_entrantes(db: db_dependency):
     Pedido = aliased(models.Pedidos)
     DetallePedido = aliased(models.Detalle_P)
     Producto = aliased(models.Productos)
@@ -160,7 +151,7 @@ async def read_pedidosEntrantes(db: db_dependency):
 
 # Retorna todos el historial de pedidos (RECHAZADOS Y FINALIZADOS) junto con su detalle
 @router.get("/backend/historialDePedidos", status_code=status.HTTP_200_OK)
-async def read_pedidosEntrantes(db: db_dependency):
+async def read_pedidos_en_historial(db: db_dependency):
     Pedido = aliased(models.Pedidos)
     DetallePedido = aliased(models.Detalle_P)
     Producto = aliased(models.Productos)
@@ -183,7 +174,7 @@ async def read_pedidosEntrantes(db: db_dependency):
 
 # Retorna todoss los pedidos que están en curso
 @router.get("/backend/pedidosEnCurso", status_code=status.HTTP_200_OK)
-async def read_pedidosEntrantes(db: db_dependency):
+async def read_pedidos_en_curso(db: db_dependency):
     Pedido = aliased(models.Pedidos)
     DetallePedido = aliased(models.Detalle_P)
     Producto = aliased(models.Productos)
@@ -204,13 +195,13 @@ async def read_pedidosEntrantes(db: db_dependency):
         })
     return pedidos_entrantes
 
-#insert en la tabla de productos
+# insert en la tabla de productos
 @router.post("/backend/addproduct", status_code=status.HTTP_201_CREATED)
 async def add_product(request: Request, db: db_dependency):
     try:
         data = await request.json()
         if isinstance(data, list) and len(data) > 0:
-            product_data = data[0]  
+            product_data = data[0]
             nuevo_producto = models.Productos(
                 nombre=product_data["nombre"],
                 descripcion=product_data["descripcion"],
@@ -232,3 +223,19 @@ async def add_product(request: Request, db: db_dependency):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
+
+# Para pedidos rechazados de una (cambia el status a HISTORIAL)
+class UpdatePedidoModel(BaseModel):
+    motivo: str
+    status: str
+
+@router.put("/backend/pedidos/{pedido_id}", status_code=status.HTTP_200_OK)
+async def rechazar_pedido_con_motivo(pedido_id: int, update_data: UpdatePedidoModel, db: db_dependency):
+    pedido = db.query(models.Pedidos).filter(
+        models.Pedidos.id == pedido_id).first()
+    if pedido is None:
+        raise HTTPException(status_code=404, detail='Pedido not Found')
+    pedido.motivo = update_data.motivo
+    pedido.status = update_data.status
+    db.commit()
+    return {"message": f"Pedido {pedido_id} rechazado con éxito y se agregó el motivo: {pedido.motivo}."}
