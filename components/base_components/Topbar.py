@@ -14,8 +14,8 @@ Topbar = (
                    "Historial de Pedidos"),
             html.a({"href": "/inventarios"},
                    "Inventarios"),
-            html.a({"href": "/compras"},
-                   "Compras"),
+            html.a({"href": "/historialcompras"},
+                   "Historial de Compras"),
         )
     )
 )

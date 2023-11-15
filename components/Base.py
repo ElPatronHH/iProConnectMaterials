@@ -8,7 +8,7 @@ def Base(content, context_value):
     return html.main(
         Head,
 #        sidebar,
-        Topbar,
+        html.div(Topbar),
         content
 #        footer
     )
