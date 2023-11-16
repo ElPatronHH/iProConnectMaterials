@@ -4,9 +4,13 @@ import asyncio
 
 @component
 def InventariosContent():
-    stock, set_stock = use_state([])
+    realstock, set_realstock = use_state([])
     editing_item_id, set_editing_item_id = use_state(None)
     #Pal update
+    nombre, set_nombre = use_state("")
+    descripcion, set_descripcion = use_state("")
+    medida, set_medida = use_state("")
+    stock, set_stock = use_state(0)
     precio_compra, set_precio_compra = use_state(0)
     precio_venta, set_precio_venta = use_state(0)
     cantidad_max, set_cantidad_max = use_state(0)
@@ -25,10 +29,10 @@ def InventariosContent():
     venta_maxN, set_venta_maxN = use_state(0)
     venta_minN, set_venta_minN = use_state(0)
     
-    # Esto renderiza nuestro catálogo
+    # Esto renderiza el catálogo
     async def fillItems():
         stock_data = await getStock()
-        set_stock(stock_data)
+        set_realstock(stock_data)
 
     # Para borrar lógicamente un producto (0 en status)
     async def handle_delete(producto):
@@ -64,6 +68,10 @@ def InventariosContent():
     async def handle_modify(producto):
         # Llama a la función modifyProducto para enviar los datos modificados al servidor
         new_data = {
+            "nombre": nombre,
+            "descripcion":descripcion,
+            "medida": medida,
+            "stock":stock,
             "precio_compra": precio_compra,
             "precio_venta": precio_venta,
             "cantidad_max": cantidad_max,
@@ -74,8 +82,12 @@ def InventariosContent():
         await modifyProducto(producto, new_data)
         await fillItems()  # Pa recarga de los elementos
 
-    def modify_button_click_handler(producto_id, precio_compra, precio_venta, cantidad_max, cantidad_min, venta_max, venta_min):
+    def modify_button_click_handler(producto_id, nombre, descripcion, medida, stock, precio_compra, precio_venta, cantidad_max, cantidad_min, venta_max, venta_min):
         set_editing_item_id(producto_id)
+        set_nombre(nombre)
+        set_descripcion(descripcion)
+        set_medida(medida)
+        set_stock(stock)
         set_precio_compra(precio_compra)
         set_precio_venta(precio_venta)
         set_cantidad_max(cantidad_max)
@@ -92,9 +104,6 @@ def InventariosContent():
 
     def cancel_button_click_handler():
         set_editing_item_id(None)
-
-
-
     use_effect(fillItems)
 
     def render_stock_item(stock_item):
@@ -198,7 +207,7 @@ def InventariosContent():
                 html.p(f"Venta Mínima: {stock_item['venta_min']}"),
                 html.div({"class": "botonera-card"},
                          html.button({"class": "btn",
-                                      "onclick": lambda event: modify_button_click_handler(stock_item["id"], stock_item['precio_compra'], stock_item['precio_venta'], stock_item['cantidad_max'], stock_item['cantidad_min'], stock_item['venta_max'], stock_item['venta_min'])
+                                      "onclick": lambda event: modify_button_click_handler(stock_item["id"], stock_item["nombre"], stock_item["descripcion"], stock_item["medida"],stock_item['stock'], stock_item['precio_compra'], stock_item['precio_venta'], stock_item['cantidad_max'], stock_item['cantidad_min'], stock_item['venta_max'], stock_item['venta_min'])
                                       },
                                      "Modificar"
                                      ),
@@ -318,5 +327,5 @@ def InventariosContent():
                                  "Añadir Producto"
                                  )
         ),
-            [render_stock_item(stock_item) for stock_item in stock]
+            [render_stock_item(stock_item) for stock_item in realstock]
         ))
