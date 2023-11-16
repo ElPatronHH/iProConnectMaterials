@@ -47,6 +47,8 @@ def PedidosEnCursoContent():
                                   f"Fecha: {pedido_item['pedido']['fecha_entrega']}")),
                               html.p({"class": "centered-p"},
                                      motivo) if motivo else "",
+                              html.p({"class": "centered-p"},
+                                     "ESTADO ACTUAL: (aquí respuesta de logística)"),
                               [render_detalle_pedido(pedido_item)
                                for pedido_item in pedido_data["productos"]]
                               )

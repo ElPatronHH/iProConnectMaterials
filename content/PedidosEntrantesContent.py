@@ -61,12 +61,12 @@ def PedidosEntrantesContent():
                                                             # "onclick": lambda event: delete_product(stock_item["id"])
                                                             },
                                                            "Aceptar"
-                                                           ),
-                                               html.button({"class": "btn btn-danger",
-                                                            "onclick": lambda e, pedido_id=pedido_id: rechazar_button_click_handler(e, pedido_id,motivo)
-                                                            },
-                                                           "Rechazar"
-                                                           )
+                                                           )#,
+                                               #html.button({"class": "btn btn-danger",
+                                                            #"onclick": lambda e, pedido_id=pedido_id: rechazar_button_click_handler(e, pedido_id,motivo)
+                                                            #},
+                                                           #"Rechazar"
+                                                           #)
                                                )),
                               html.div({"class": "input-centrado"},
                                        html.input(
