@@ -1,6 +1,7 @@
 from reactpy import html, component, use_state, use_effect
-from database.api import getPedidosEntrantes, rechazarPedido, aceptarPedido, obtenerDetalleDePedidos, modifyStock, comprobarStockSuficiente, getItemFabricacion  # , notificarLogistica
+from database.api import getPedidosEntrantes, rechazarPedido, aceptarPedido, obtenerDetalleDePedidos, modifyStock, comprobarStockSuficiente, getItemFabricacion, addCompra  # , notificarLogistica
 import asyncio
+from datetime import datetime
 
 
 @component
@@ -67,6 +68,9 @@ def PedidosEntrantesContent():
                     resultados.append(
                         {"id_producto": id_producto, "nueva_cantidad": nueva_cantidad})
         return resultados
+    def obtener_fecha_actual():
+        fecha_actual = datetime.now().strftime("%Y-%m-%d")
+        return fecha_actual
 
     async def fillPedidos():
         pedidos_data = await getPedidosEntrantes()
@@ -94,12 +98,21 @@ def PedidosEntrantesContent():
         # Esto se cambia hasta estar en producción para agilizar desarrollo
         # await asyncio.sleep(tiempo)
         cantidad_fabricar = cantidad - dataProducto.get("cantidad")
+        nuevo_stock = dataProducto.get("cantidad") + cantidad_fabricar
         print("El total a producir es: ", cantidad_fabricar)
         new = {
-            "stock": cantidad_fabricar
+            "stock": nuevo_stock
         }
         await modifyStock(id_producto, new)
         print(f"{cantidad_fabricar} de item {id_producto} agregados al inventario.")
+        date = obtener_fecha_actual()
+        compra_data = [{
+            "id_producto": id_producto,
+            "cantidad":cantidad_fabricar, 
+            "fecha": date,
+            "precio_total":100000
+        }]
+        await addCompra(compra_data)
         await handle_aceptar(pedido_id)
         
     async def handle_aceptar(pedido):

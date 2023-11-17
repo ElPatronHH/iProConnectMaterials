@@ -1,0 +1,19 @@
+Detalle:  [{'id_producto': 6, 'cantidad': 10000}, {'id_producto': 7, 'cantidad': 20000}, {'id_producto': 3, 'cantidad': 4000}]
+Real Stock:  [{'id': 3, 'stock': 2000}, {'id': 6, 'stock': 2000}, {'id': 7, 'stock': 2000}]
+El pedido para el producto con ID 6 es NO válido.
+El pedido para el producto con ID 7 es NO válido.
+El pedido para el producto con ID 3 es NO válido.
+Stock insuficiente, se requiere producir.
+RESULTADOS DE LOS NO VALIDOS:  [{'id_producto': 6, 'cantidad': 10000}, {'id_producto': 7, 'cantidad': 20000}, {'id_producto': 3, 'cantidad': 4000}]
+La data del producto 6 es esta:   {'tiempo_fabricacion': 2, 'cantidad': 2000}
+El tiempo de fabricación será de  4000  segundos.
+El total a producir es:  8000
+8000 de item 6 agregados al inventario.
+La data del producto 7 es esta:   {'tiempo_fabricacion': 2, 'cantidad': 2000}
+El tiempo de fabricación será de  4000  segundos.
+El total a producir es:  18000
+18000 de item 7 agregados al inventario.
+La data del producto 3 es esta:   {'tiempo_fabricacion': 2, 'cantidad': 2000}
+El tiempo de fabricación será de  4000  segundos.
+El total a producir es:  2000
+2000 de item 3 agregados al inventario.

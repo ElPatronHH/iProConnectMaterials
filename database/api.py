@@ -124,3 +124,10 @@ async def getCompras():
         return response.json()
     else:
         return {"Error al obtener datos."}
+    
+async def addCompra(compra_data):
+    url = "http://localhost:8000/backend/compras_logs" 
+    async with httpx.AsyncClient() as client:
+        response = await client.post(url, json=compra_data)
+    if response.status_code == 201:
+        return response.json()

@@ -317,22 +317,15 @@ async def add_shop_log(request: Request, db: db_dependency):
         data = await request.json()
         if isinstance(data, list) and len(data) > 0:
             product_data = data[0]
-            nuevo_producto = models.Productos(
-                nombre=product_data["nombre"],
-                descripcion=product_data["descripcion"],
-                medida=product_data["medida"],
-                stock=product_data["stock"],
-                precio_compra=product_data["precio_compra"],
-                precio_venta=product_data["precio_venta"],
-                cantidad_max=product_data["cantidad_max"],
-                cantidad_min=product_data["cantidad_min"],
-                venta_max=product_data["venta_max"],
-                venta_min=product_data["venta_min"],
-                status=product_data["status"]
+            log = models.Compras(
+                id_producto = product_data["id_producto"],
+                cantidad = product_data["cantidad"],
+                fecha = product_data["fecha"],
+                precio_total = product_data["precio_total"],
             )
-            db.add(nuevo_producto)
+            db.add(log)
             db.commit()
-            return nuevo_producto
+            return {"Compra insertada :)"}
         else:
             raise HTTPException(status_code=400, detail="Invalid JSON format")
     except Exception as e:

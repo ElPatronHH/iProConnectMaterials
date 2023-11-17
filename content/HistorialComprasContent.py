@@ -16,10 +16,12 @@ def HistorialComprasContent():
     def render_historial_compras(compra_item):
         return html.tr(
             {"key": compra_item["compra"]["id"]},
+            html.td(f"{compra_item['compra']['id']}"),
             html.td(f"{compra_item['compra']['fecha']}"),
             html.td(f"{compra_item['producto']['nombre']}"),
-            html.td(f"{compra_item['producto']['descripcion']}"),
             html.td(f"{compra_item['producto']['id']}"),
+            html.td(f"{compra_item['producto']['descripcion']}"),
+            html.td(f"{compra_item['compra']['cantidad']}"),
             html.td(f"{compra_item['compra']['precio_total']}")
         )
 
@@ -30,8 +32,10 @@ def HistorialComprasContent():
             {"class": "table table-striped"},
             html.thead(
                 html.tr(
+                    html.th("ID Compra"),
                     html.th("Fecha"),
                     html.th("Parte comprada"),
+                    html.th("ID Pieza"),
                     html.th("Descripción"),
                     html.th("Cantidad"),
                     html.th("Costo Total")
