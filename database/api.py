@@ -68,3 +68,41 @@ async def rechazarPedido(pedido_id,update_data):
         return True
     else:
         return False
+    
+async def aceptarPedido(pedido_id,update_data):
+    url = f"http://localhost:8000/backend/acceptpedido/{pedido_id}" 
+    async with httpx.AsyncClient() as client:
+        response = await client.put(url, json=update_data)
+    if response.status_code == 200:
+        return True
+    else:
+        return False
+    
+import httpx
+
+async def comprobarStockSuficiente(id_productos):
+    url = "http://localhost:8000/backend/comprobacion_stock"
+    async with httpx.AsyncClient() as client:
+        response = await client.post(url, json=id_productos)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return False
+    
+async def obtenerDetalleDePedidos(id_pedido):
+    url = f"http://localhost:8000/backend/detalle_pedidos?pedido_id={id_pedido}"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+
+async def modifyStock(producto_id, update_data):
+    async with httpx.AsyncClient() as client:
+        url = f"http://localhost:8000/backend/productos_new_stock/{producto_id}"
+        response = await client.put(url, json=update_data) 
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return False

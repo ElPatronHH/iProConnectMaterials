@@ -11,6 +11,7 @@ CREATE TABLE productos (
     cantidad_min INT,
     venta_max INT,
     venta_min INT,
+    tiempo_fabricacion INT,
     status INT
 );
 
@@ -45,29 +46,29 @@ CREATE TABLE compras (
 
 -- Datos de prueba para la tabla productos
 -- 1, precio: 20
-INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min,status)
-VALUES ('T3_B_0COB1', 'Cobre', 'Unidad', 10, 20,2000, 100, 10, 1000, 1, 1);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min, tiempo_fabricacion, status)
+VALUES ('T3_B_0COB1', 'Cobre', 'Unidad', 10, 20,2000, 100, 10, 1000, 1, 2, 1);
 -- 2, precio: 25
-INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min,status)
-VALUES ('T3_B_0ALU2', 'Aluminio', 'Unidad', 15, 25,2000, 150, 20, 1000, 1, 1);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min, tiempo_fabricacion,status)
+VALUES ('T3_B_0ALU2', 'Aluminio', 'Unidad', 15, 25,2000, 150, 20, 1000, 1, 2, 1);
 -- 3, precio: 10
-INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min,status)
-VALUES ('T3_B_0SIL3', 'Silicio', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 1);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min, tiempo_fabricacion,status)
+VALUES ('T3_B_0SIL3', 'Silicio', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 2, 1);
 -- 4, precio: 10
-INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min,status)
-VALUES ('T3_B_0ORO4', 'Oro', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 1);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min, tiempo_fabricacion,status)
+VALUES ('T3_B_0ORO4', 'Oro', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 2, 1);
 -- 5, precio: 10
-INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min,status)
-VALUES ('T3_B_0EST5', 'Estaño', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 1);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min, tiempo_fabricacion,status)
+VALUES ('T3_B_0EST5', 'Estaño', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 2, 1);
 -- 6, precio: 10
-INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min,status)
-VALUES ('T3_B_0PLA6', 'Plata', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 1);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min, tiempo_fabricacion,status)
+VALUES ('T3_B_0PLA6', 'Plata', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 2, 1);
 -- 7, precio: 10
-INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min,status)
-VALUES ('T3_B_0VID7', 'Vidrio', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 1);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min, tiempo_fabricacion,status)
+VALUES ('T3_B_0VID7', 'Vidrio', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 2, 1);
 -- 8, precio: 10
-INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min,status)
-VALUES ('T3_B_0LIT8', 'Litio', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 1);
+INSERT INTO productos (nombre, descripcion, medida, precio_compra, precio_venta, stock, cantidad_max, cantidad_min, venta_max, venta_min, tiempo_fabricacion,status)
+VALUES ('T3_B_0LIT8', 'Litio', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 2, 1);
 
 -- Datos de prueba para la tabla pedidos
 INSERT INTO pedidos (fecha_pedido, fecha_entrega, metodo_pago, total, status, motivo) VALUES

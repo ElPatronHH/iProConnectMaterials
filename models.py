@@ -15,6 +15,7 @@ class Productos(DataBase):
     cantidad_min = Column(Integer)
     venta_max = Column(Integer)
     venta_min = Column(Integer)
+    tiempo_fabricacion = Column(Integer)
     status = Column(Integer)
 
 class Pedidos(DataBase):

@@ -1,5 +1,6 @@
-from fastapi import APIRouter, HTTPException, Depends, status, Request
+from fastapi import APIRouter, HTTPException, Depends, status, Request, Path
 from typing import Annotated
+from typing import List
 from pydantic import BaseModel
 import models
 from database.database import engine, SessionLocal
@@ -31,6 +32,7 @@ class UpdateProductoModel(BaseModel):
     nombre: str
     descripcion: str
     medida: str
+    stock: int
     precio_compra: int
     precio_venta: int
     cantidad_max: int
@@ -74,7 +76,7 @@ async def borrar_logicamente_product(producto_id: int, new_status: int, db: db_d
     db.commit()
     return {"message": f"Status del producto {producto_id} actualizado a {new_status}"}
 
-# Lee la tabla de productos con un 1 en statur, pai
+# Lee la tabla de productos con un 1 en status, pai
 @router.get("/backend/stockfull", status_code=status.HTTP_200_OK)
 async def read_full_stock(db: db_dependency):
     stocks = db.query(models.Productos).filter(
@@ -228,7 +230,6 @@ async def add_product(request: Request, db: db_dependency):
 class UpdatePedidoModel(BaseModel):
     motivo: str
     status: str
-
 @router.put("/backend/pedidos/{pedido_id}", status_code=status.HTTP_200_OK)
 async def rechazar_pedido_con_motivo(pedido_id: int, update_data: UpdatePedidoModel, db: db_dependency):
     pedido = db.query(models.Pedidos).filter(
@@ -239,3 +240,62 @@ async def rechazar_pedido_con_motivo(pedido_id: int, update_data: UpdatePedidoMo
     pedido.status = update_data.status
     db.commit()
     return {"message": f"Pedido {pedido_id} rechazado con éxito y se agregó el motivo: {pedido.motivo}."}
+
+#Para aceptar un pedido y pasarlo a pedido entrante
+class AcceptPedidoModel(BaseModel):
+    status: str
+@router.put("/backend/acceptpedido/{pedido_id}", status_code=status.HTTP_200_OK)
+async def aceptar_pedido(pedido_id: int, update_data: AcceptPedidoModel, db: db_dependency):
+    pedido = db.query(models.Pedidos).filter(
+        models.Pedidos.id == pedido_id).first()
+    if pedido is None:
+        raise HTTPException(status_code=404, detail='Pedido not Found')
+    pedido.status = update_data.status
+    db.commit()
+    return {"message": f"Pedido {pedido_id} aceptado con éxito."}
+
+#Para solicitar datos relevantes previos a la aceptación (Productos:	id, stock, tiempo_fabricacion)
+@router.post("/backend/comprobacion_stock", status_code=status.HTTP_200_OK)
+async def comprobacion_stock(product_ids: List[int], db: Session = Depends(get_db)):
+    productos = db.query(models.Productos).filter(
+        models.Productos.id.in_(product_ids),
+        models.Productos.status == 1
+    ).all()
+    if len(productos) != len(set(product_ids)):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Al menos un producto no encontrado")
+    response_data = [{"id": producto.id, "stock": producto.stock} for producto in productos]
+    return response_data
+
+# Obtener detalles de pedidos para un pedido específico
+@router.get("/backend/detalle_pedidos", status_code=status.HTTP_200_OK)
+async def read_detalle_pedidos(db: db_dependency, pedido_id: int):
+    Pedido = aliased(models.Pedidos)
+    DetallePedido = aliased(models.Detalle_P)
+    query = (
+        select(DetallePedido.id_producto, DetallePedido.cantidad)
+        .join(Pedido, Pedido.id == DetallePedido.id_pedido) 
+        .where(Pedido.id == pedido_id)
+    )
+    result = db.execute(query).all()
+    detalles_pedidos = []
+    for row in result:
+        id_producto, cantidad = row
+        detalles_pedidos.append({
+            "id_producto": id_producto,
+            "cantidad": cantidad,
+        })
+    return detalles_pedidos
+
+# Actualiza el stock después de una venta
+class UpdateStockModel(BaseModel):
+    stock: int
+@router.put("/backend/productos_new_stock/{producto_id}", status_code=status.HTTP_200_OK)
+async def update_stock_product(producto_id: int, update_data: UpdateStockModel, db: db_dependency):
+    producto = db.query(models.Productos).filter(
+        models.Productos.id == producto_id).first()
+    if producto is None:
+        raise HTTPException(status_code=404, detail='Producto not Found')
+    a = producto.stock
+    producto.stock = update_data.stock
+    db.commit()
+    return {"message": f"Producto {producto_id} actualizado de {a} a {update_data.stock}."}
