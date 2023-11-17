@@ -41,10 +41,11 @@ def PedidosEntrantesContent():
                 if stock_disponible is not None and stock_disponible >= cantidad_pedido > 0:
                     print(f"xd")
                 else:
-                    resultados.append({"id_producto": id_producto, "cantidad": cantidad_pedido})
+                    resultados.append(
+                        {"id_producto": id_producto, "cantidad": cantidad_pedido})
         print("RESULTADOS DE LOS NO VALIDOS: ", resultados)
         return resultados
-    
+
     async def actualizarStock(resultados):
         for resultado in resultados:
             producto_id = resultado.get('id_producto')
@@ -71,26 +72,27 @@ def PedidosEntrantesContent():
         pedidos_data = await getPedidosEntrantes()
         set_pedidos(pedidos_data)
 
-    #async def handle_rechazar(pedido, motivo):
-        #json = {
-            #"motivo": motivo,
-            #"status": "HISTORIAL"
-        #}
-        #await rechazarPedido(pedido, json)
-        #await fillPedidos()
+    # async def handle_rechazar(pedido, motivo):
+        # json = {
+        # "motivo": motivo,
+        # "status": "HISTORIAL"
+        # }
+        # await rechazarPedido(pedido, json)
+        # await fillPedidos()
     # def rechazar_button_click_handler(e, pedido_id, motivo):
         # async def async_handler():
         # await handle_rechazar(pedido_id, motivo)
         # asyncio.ensure_future(async_handler())
 
-    async def fabricacion(id_producto, cantidad):
+    async def fabricacion(id_producto, cantidad, pedido_id):
         dataProducto = await getItemFabricacion(id_producto)
         print(f"La data del producto {id_producto} es esta:  ", dataProducto)
-        tiempo = (dataProducto.get("tiempo_fabricacion"))*(dataProducto.get("cantidad"))
+        tiempo = (dataProducto.get("tiempo_fabricacion")) * \
+            (dataProducto.get("cantidad"))
         print("El tiempo de fabricación será de ", tiempo, " segundos.")
         await asyncio.sleep(10)
-        #Esto se cambia hasta estar en producción para agilizar desarrollo
-        #await asyncio.sleep(tiempo)
+        # Esto se cambia hasta estar en producción para agilizar desarrollo
+        # await asyncio.sleep(tiempo)
         cantidad_fabricar = cantidad - dataProducto.get("cantidad")
         print("El total a producir es: ", cantidad_fabricar)
         new = {
@@ -98,7 +100,8 @@ def PedidosEntrantesContent():
         }
         await modifyStock(id_producto, new)
         print(f"{cantidad_fabricar} de item {id_producto} agregados al inventario.")
-
+        await handle_aceptar(pedido_id)
+        
     async def handle_aceptar(pedido):
         json = {
             "status": "EN CURSO"
@@ -127,9 +130,10 @@ def PedidosEntrantesContent():
                         await handle_aceptar(pedido_id)
                     else:
                         print("Stock insuficiente, se requiere producir.")
-                        productos_a_fabricar = recuperar_not_valid(detalle, realstock)
+                        productos_a_fabricar = recuperar_not_valid(
+                            detalle, realstock)
                         for producto in productos_a_fabricar:
-                            await fabricacion(producto.get('id_producto'), producto.get('cantidad'))
+                            await fabricacion(producto.get('id_producto'), producto.get('cantidad'), pedido_id)
         asyncio.ensure_future(async_handler())
 
     use_effect(fillPedidos)
@@ -142,8 +146,8 @@ def PedidosEntrantesContent():
                                  f"Producto: {pedido_item['producto']['nombre']}"),
                         html.p(
                             f"Cantidad: {pedido_item['detalle_pedido']['cantidad']}")
-                        )
-                    )
+        )
+        )
 
     grouped_pedidos = {}
     for pedido_item in pedidos:
