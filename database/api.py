@@ -106,3 +106,12 @@ async def modifyStock(producto_id, update_data):
         return response.json()
     else:
         return False
+    
+async def getItemFabricacion(producto_id):
+    url = f"http://localhost:8000/backend/producto_tiempo/{producto_id}"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": f"Error al obtener datos para el producto {producto_id}"}

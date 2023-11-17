@@ -92,6 +92,20 @@ INSERT INTO compras (id_producto, cantidad, fecha, precio_total) VALUES
 (3, 30, '2023-11-03', 300);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 --EJEMPLO DE SOLICITUD POST PARA PEDIDO
 [
   {

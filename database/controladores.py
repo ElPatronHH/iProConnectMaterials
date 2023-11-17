@@ -299,3 +299,13 @@ async def update_stock_product(producto_id: int, update_data: UpdateStockModel, 
     producto.stock = update_data.stock
     db.commit()
     return {"message": f"Producto {producto_id} actualizado de {a} a {update_data.stock}."}
+
+# Lee la tabla de productos y retorna del que le des id
+@router.get("/backend/producto_tiempo/{producto_id}", status_code=status.HTTP_200_OK)
+async def read_tiempo_cantidad(db: db_dependency, producto_id: int):
+    product = db.query(models.Productos).filter(
+        models.Productos.id == producto_id).first()
+    if product:
+        return {"tiempo_fabricacion": product.tiempo_fabricacion, "cantidad": product.stock}
+    else:
+        return {"error": "Producto no encontrado"}

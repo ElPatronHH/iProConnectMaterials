@@ -83,8 +83,8 @@ body{
 }
 
 .botonera-card {
-  display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
 }
 .grupo-tarjeta{
   background-color: lightgrey;
