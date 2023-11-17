@@ -309,3 +309,60 @@ async def read_tiempo_cantidad(db: db_dependency, producto_id: int):
         return {"tiempo_fabricacion": product.tiempo_fabricacion, "cantidad": product.stock}
     else:
         return {"error": "Producto no encontrado"}
+    
+# insert en la tabla de compras
+@router.post("/backend/compras_logs", status_code=status.HTTP_201_CREATED)
+async def add_shop_log(request: Request, db: db_dependency):
+    try:
+        data = await request.json()
+        if isinstance(data, list) and len(data) > 0:
+            product_data = data[0]
+            nuevo_producto = models.Productos(
+                nombre=product_data["nombre"],
+                descripcion=product_data["descripcion"],
+                medida=product_data["medida"],
+                stock=product_data["stock"],
+                precio_compra=product_data["precio_compra"],
+                precio_venta=product_data["precio_venta"],
+                cantidad_max=product_data["cantidad_max"],
+                cantidad_min=product_data["cantidad_min"],
+                venta_max=product_data["venta_max"],
+                venta_min=product_data["venta_min"],
+                status=product_data["status"]
+            )
+            db.add(nuevo_producto)
+            db.commit()
+            return nuevo_producto
+        else:
+            raise HTTPException(status_code=400, detail="Invalid JSON format")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
+
+# Retorna todas las compras
+@router.get("/backend/gethistorialCompras", status_code=status.HTTP_200_OK)
+async def read_historial_de_compras(db: db_dependency):
+    Compras = aliased(models.Compras)
+    Productos = aliased(models.Productos)
+    query = (
+        select(Compras, Productos)
+        .join(Productos, Compras.id_producto == Productos.id)
+    )
+    result = db.execute(query).all()
+    historial_compras = []
+    for row in result:
+        compra, producto = row
+        historial_compras.append({
+            "compra": {
+                "id": compra.id,
+                "fecha": compra.fecha,
+                "cantidad": compra.cantidad,
+                "precio_total": compra.precio_total
+            },
+            "producto": {
+                "id": producto.id,
+                "nombre": producto.nombre,
+                "descripcion": producto.descripcion
+            }
+        })
+    return historial_compras

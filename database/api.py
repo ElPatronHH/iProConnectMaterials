@@ -115,3 +115,12 @@ async def getItemFabricacion(producto_id):
         return response.json()
     else:
         return {"error": f"Error al obtener datos para el producto {producto_id}"}
+
+async def getCompras():
+    url = f"http://localhost:8000/backend/gethistorialCompras"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"Error al obtener datos."}
