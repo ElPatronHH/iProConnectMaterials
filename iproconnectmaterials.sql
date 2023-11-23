@@ -1,4 +1,5 @@
--- 3.0
+-- 4.0
+use iproconnectmaterials;
 CREATE TABLE productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(20),
@@ -19,7 +20,7 @@ CREATE TABLE pedidos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fecha_pedido DATE,
     fecha_entrega DATE,
-    metodo_pago VARCHAR(20),
+    metodo_pago VARCHAR(50),
     total INT,
     status ENUM('ENTRANTE', 'EN CURSO', 'HISTORIAL'),
     motivo VARCHAR(200)
@@ -72,9 +73,9 @@ VALUES ('T3_B_0LIT8', 'Litio', 'Kilogramo', 5, 10,2000, 50, 5, 1000, 1, 2, 1);
 
 -- Datos de prueba para la tabla pedidos
 INSERT INTO pedidos (fecha_pedido, fecha_entrega, metodo_pago, total, status, motivo) VALUES
-('2023-11-06', '2023-11-10', 'Tarjeta de crédito', 325, 'EN CURSO', ''),
+('2023-11-06', '2023-11-10', 'Tarjeta de Crédito', 325, 'EN CURSO', ''),
 ('2023-11-07', '2023-11-12', 'Efectivo', 325, 'ENTRANTE', ''),
-('2023-11-08', '2023-11-14', 'Transferencia bancaria', 1600, 'ENTRANTE', '');
+('2023-11-08', '2023-11-14', 'Transferencia Bancaria', 1600, 'ENTRANTE', '');
 -- Datos de prueba para la tabla detalle_p (Detalles de los pedidos)
 INSERT INTO detalle_p (id_pedido, id_producto, cantidad, precio) VALUES
 (1, 1, 10, 200),
@@ -90,6 +91,8 @@ INSERT INTO compras (id_producto, cantidad, fecha, precio_total) VALUES
 (1, 100, '2023-11-01', 2000),
 (2, 50, '2023-11-02', 1250),
 (3, 30, '2023-11-03', 300);
+
+
 
 
 
