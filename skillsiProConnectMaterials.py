@@ -1,25 +1,48 @@
 import logging
 import ask_sdk_core.utils as ask_utils
+import requests
+
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model import Response
 
+#abre inventario tier tres topicos
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 class LaunchRequestHandler(AbstractRequestHandler):
-    """Handler for Skill Launch."""
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-
         return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        speak_output = "Welcome, you can say Hello or Help. Which would you like to try?"
-
+        speak_output = "Bienvenido a la skill de aiProConnectMaterials, desde aquí se pueden consultar inventarios."
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
+        )
+        
+class InventoryIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return ask_utils.is_intent_name("InventoryIntent")(handler_input)
+    
+    def handle(self, handler_input):
+        url = "http://40.76.247.213:8000/backend/stockfull"
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            print(data)
+        else:
+            print(f"Error: {response.status_code}")
+            
+        if data:
+            speak_output = "Aquí están los productos disponibles: "
+            for producto in data:
+                speak_output += f"{producto['descripcion']} con precio de {producto['precio_venta']} por {producto['medida']}. "
         return (
             handler_input.response_builder
                 .speak(speak_output)
@@ -27,12 +50,12 @@ class LaunchRequestHandler(AbstractRequestHandler):
                 .response
         )
 
-
 class HelloWorldIntentHandler(AbstractRequestHandler):
     """Handler for Hello World Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return ask_utils.is_intent_name("HelloWorldIntent")(handler_input)
+
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         speak_output = "Hello World!"
@@ -43,7 +66,6 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")
                 .response
         )
-
 
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
@@ -61,7 +83,6 @@ class HelpIntentHandler(AbstractRequestHandler):
                 .ask(speak_output)
                 .response
         )
-
 
 class CancelOrStopIntentHandler(AbstractRequestHandler):
     """Single handler for Cancel and Stop Intent."""
@@ -161,6 +182,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 sb = SkillBuilder()
 
 sb.add_request_handler(LaunchRequestHandler())
+sb.add_request_handler(InventoryIntentHandler())
 sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())

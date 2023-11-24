@@ -1,0 +1,23 @@
+EN MÁQUINA LOCAL:
+Crear DockerFile
+con pip freeze > requirements.txt   se ponen todas las dependencias que usas en un txt
+docker build -t nombreimagen:tag .
+docker save -o nombreimagen.tar nombreimagen:tag 
+
+EN VIRTUAL MACHINE:
+Instalar Docker en maquina virtual
+Cuando se encuentre la imagen en server
+docker load -i /tmp/nombreimagen.tar
+docker images 	#(para comprobar que ya la detecta)
+docker run -p 8000:8000 -d nombreimagen:tag
+docker logs 72f2c6aae590
+
+docker rm -f $(docker ps -aq) #eliminar todos contenedores
+docker rmi -f $(docker images -aq) #eliminar todas las imagenes
+docker ps -a #para ver contenedores
+docker images -a #para ver imagenes creadas
+
+docker exec -it 3a54f5438ebd9ceef306ae907d106fc7b565ec1923a01d71f21e9d701c5b6950 /bin/bash
+
+Se usó Mysql flexible con este tuto:
+https://www.youtube.com/watch?v=vlYV4_8VN70
