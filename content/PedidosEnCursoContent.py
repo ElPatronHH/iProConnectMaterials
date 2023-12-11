@@ -24,6 +24,8 @@ def PedidosEnCursoContent():
                 html.div({"class": "card-title"},
                          f"Producto: {pedido_item['producto']['nombre']}"),
                 html.p(
+                    f"{pedido_item['producto']['descripcion']}"),
+                html.p(
                     f"Cantidad: {pedido_item['detalle_pedido']['cantidad']}")
             )
             ))

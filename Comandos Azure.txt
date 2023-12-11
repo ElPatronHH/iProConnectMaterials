@@ -1,0 +1,15 @@
+--MYSQL FLEXIBLE--
+user db: topicos
+password: Admin12345
+db name: iproconnectmaterials
+
+--MÁQUINA VIRTUAL--
+user vm: topicos
+password: Topicos12345
+
+--RUN CONTAINER--
+sudo -i
+docker run -p 8000:8000 -d nombreimagen:tag
+
+abre inventario tier tres
+dime el inventario completo

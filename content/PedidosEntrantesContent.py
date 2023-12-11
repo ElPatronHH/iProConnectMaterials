@@ -149,6 +149,8 @@ def PedidosEntrantesContent():
                             await fabricacion(producto.get('id_producto'), producto.get('cantidad'), pedido_id)
         asyncio.ensure_future(async_handler())
 
+    #def alertas():
+        
     use_effect(fillPedidos)
 
     def render_detalle_pedido(pedido_item):
@@ -158,7 +160,9 @@ def PedidosEntrantesContent():
                         html.div({"class": "card-title"},
                                  f"Producto: {pedido_item['producto']['nombre']}"),
                         html.p(
-                            f"Cantidad: {pedido_item['detalle_pedido']['cantidad']}")
+                            f"{pedido_item['producto']['descripcion']}"),
+                        html.p(
+                            f"Cantidad: {pedido_item['detalle_pedido']['cantidad']}")                        
         )
         )
 

@@ -84,7 +84,7 @@ async def read_full_stock(db: db_dependency):
     return stocks
 
 # Este postea un pedido entrante con el formato JSON, las fechas y el id son el mismo, pero inserta múltiples registros por producto
-@router.post("/backend/postPedidoEntrante", status_code=status.HTTP_201_CREATED)
+"""@router.post("/backend/postPedidoEntrante", status_code=status.HTTP_201_CREATED)
 async def add_pedido_entrante(request: Request, db: db_dependency):
     try:
         data = await request.json()
@@ -118,6 +118,53 @@ async def add_pedido_entrante(request: Request, db: db_dependency):
         nuevo_pedido.total = total_pedido
         db.commit()
         return {"message": "Pedido entrante creado exitosamente."}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(e))"""
+
+from fastapi import HTTPException
+
+@router.post("/backend/postPedidoEntrante", status_code=status.HTTP_201_CREATED)
+async def add_pedido_entrante(request: Request, db: db_dependency):
+    try:
+        data = await request.json()
+        total_pedido = 0
+        nuevo_pedido = models.Pedidos(
+            fecha_pedido=data[0].get("fecha_pedido"),
+            fecha_entrega=data[0].get("fecha_entrega"),
+            metodo_pago=data[0].get("metodo_pago"),
+            status='ENTRANTE',
+            motivo=''
+        )
+        db.add(nuevo_pedido)
+        db.commit()
+        for producto_data in data[0]["productos"]:
+            producto_id = producto_data["id"]
+            cantidad = int(producto_data["cantidad"])
+            producto = db.query(models.Productos).filter(
+                models.Productos.id == producto_id).first()
+            if not producto:
+                raise HTTPException(status_code=404, detail="Producto no encontrado")
+            venta_min = producto.venta_min
+            if cantidad < venta_min:
+                raise HTTPException(status_code=400, detail=f"La cantidad de '{producto.nombre}' es inferior al límite mínimo permitido.")
+            precio = producto.precio_venta
+            total_producto = precio * cantidad
+            total_pedido += total_producto
+            detalle_pedido = models.Detalle_P(
+                id_pedido=nuevo_pedido.id,
+                id_producto=producto_id,
+                cantidad=cantidad,
+                precio=total_producto
+            )
+            db.add(detalle_pedido)
+            db.commit()
+        nuevo_pedido.total = total_pedido
+        db.commit()
+        return {"message": "Pedido entrante creado exitosamente."}
+    except HTTPException as http_exception:
+        db.rollback()
+        raise http_exception
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
@@ -359,3 +406,4 @@ async def read_historial_de_compras(db: db_dependency):
             }
         })
     return historial_compras
+
